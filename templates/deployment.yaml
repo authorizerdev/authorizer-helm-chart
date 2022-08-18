@@ -36,12 +36,10 @@ spec:
             value: "{{ .Values.authorizer.database.type }}"
           - name: "DATABASE_URL"
             value: "{{ .Values.authorizer.database.url }}"
-          - name: "DATABASE_NAME"
-            value: "{{ .Values.authorizer.database.name }}"
-          - name: "ORGANIZATION_NAME"
-            value: "{{ .Values.authorizer.organization.name }}"
-          - name: "ORGANIZATION_LOGO"
-            value: "{{ .Values.authorizer.organization.name }}"
+          {{- if .Values.authorizer.redis.url }}
+          - name: "REDIS_URL"
+            value: "{{ .Values.authorizer.redis.url }}"
+          {{- end }}
           {{- if .Values.extraEnv }}
           {{- toYaml .Values.extraEnv | nindent 5 }}
           {{- end }}

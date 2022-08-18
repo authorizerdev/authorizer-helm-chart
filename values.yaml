@@ -61,12 +61,10 @@ extraEnv: []
 
 authorizer:
 
-  organization:
-    # Name of organization that you want on default login page
-    name: "Authorizer"
-
-    # Logo of organization that you want on default login page
-    logo: "https://authorizer.dev/images/logo.png"
+  redis:
+    # Redis URL where sessions can be persisted
+    # (sessions will be stored in memory if null)
+    url: null
 
   # Database specific configuration
   database:
@@ -78,11 +76,6 @@ authorizer:
     # Database connection string. In case of cluster url eg. for
     # cassandra db, you can use comma separated IPs.
     url: null
-
-    # Name of database to connect to. This is useful in case of
-    # arangodb and mongodb. If not set, default value will be used
-    name: "authorizer"
-
 
 
 
