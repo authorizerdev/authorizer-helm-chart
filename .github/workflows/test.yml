@@ -20,4 +20,4 @@ jobs:
           --set authorizer.database.url=/tmp/db \
           authorizer .
     - name: Run connection test
-      run: timeout -s 9 30 helm test
+      run: timeout -s 9 30 helm test --namespace default authorizer
