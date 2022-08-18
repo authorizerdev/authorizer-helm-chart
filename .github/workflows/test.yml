@@ -1,0 +1,23 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    name: Test cluster integration
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start minikube
+      uses: medyagh/setup-minikube@master
+    - name: Install cluster on minikube
+      run: |
+        helm upgrade \
+          --install \
+          --namespace default \
+          --set authorizer.database.type=sqlite \
+          --set authorizer.database.url=/tmp/db \
+          authorizer .
+    - name: Run connection test
+      run: timeout -s 9 30 helm test

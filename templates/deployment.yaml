@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "..labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "..selectorLabels" . | nindent 6 }}
@@ -33,9 +31,23 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: "DATABASE_TYPE"
+            value: "{{ .Values.authorizer.database.type }}"
+          - name: "DATABASE_URL"
+            value: "{{ .Values.authorizer.database.url }}"
+          - name: "DATABASE_NAME"
+            value: "{{ .Values.authorizer.database.name }}"
+          - name: "ORGANIZATION_NAME"
+            value: "{{ .Values.authorizer.organization.name }}"
+          - name: "ORGANIZATION_LOGO"
+            value: "{{ .Values.authorizer.organization.name }}"
+          {{- if .Values.extraEnv }}
+          {{- toYaml .Values.extraEnv | nindent 5 }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
