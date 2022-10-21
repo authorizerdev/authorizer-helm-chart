@@ -2,7 +2,7 @@
 
 ## Settings 
 
-- [ ] Make database and redis urls configurable via secret
+- [X] Make database and redis urls configurable via secret
 - [ ] Give option for mounting volumes 
 - [ ] Give option for supplying command line arguments
 
