@@ -1,0 +1,37 @@
+{{- if not .Values.authorizer.redis_url }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: 'redis'
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest
+          command: ['redis-server', '--appendonly', 'yes']
+          ports:
+            - containerPort: 6379
+              name: web
+          volumeMounts:
+            - name: redis
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: redis
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: 'standard'
+        resources:
+          requests:
+            storage: 5Gi
+{{- end }}

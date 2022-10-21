@@ -16,8 +16,8 @@ jobs:
         helm upgrade \
           --install \
           --namespace default \
-          --set authorizer.database.type=sqlite \
-          --set authorizer.database.url=/tmp/db \
+          --set authorizer.database_type=sqlite \
+          --set authorizer.database_url=/tmp/db \
           --set securityContext.readOnlyRootFilesystem=false \
           authorizer .
     - name: Run connection test

@@ -61,22 +61,27 @@ extraEnv: []
 
 authorizer:
 
-  redis:
-    # Redis URL where sessions can be persisted
-    # (sessions will be stored in memory if null)
-    url: null
+  # Redis URL where sessions can be persisted
+  # (if not set k8s will create redis instance with 2Gi volume)
+  redis_url: null
 
-  # Database specific configuration
-  database:
-    # Which database you are using. Supported database
-    # types are postgres, mysql, planetscale, sqlite, sqlserver,
-    # mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb
-    type: null
+  # Which database you are using. Supported database
+  # types are postgres, mysql, planetscale, sqlite, sqlserver,
+  # mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb, dynamodb
+  database_type: null
 
-    # Database connection string. In case of cluster url eg. for
-    # cassandra db, you can use comma separated IPs.
-    url: null
+  # Database connection string. In case of cluster url eg. for
+  # cassandra db, you can use comma separated IPs.
+  database_url: null
 
+  # AWS region. In case of dynamodb database_type
+  aws_region: null
+
+  # AWS access key identifier. In case of dynamodb database_type
+  aws_access_key_id: null
+
+  # AWS secret access key. In case of dynamodb database_type
+  aws_secret_access_key: null
 
 
 

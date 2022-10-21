@@ -13,3 +13,20 @@ spec:
       name: http
   selector:
     {{- include "..selectorLabels" . | nindent 4 }}
+{{- if not .Values.authorizer.redis_url }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  ports:
+    - port: 6379
+      protocol: TCP
+  selector:
+    app: redis
+  type: ClusterIP
+  clusterIP: None
+{{- end }}
