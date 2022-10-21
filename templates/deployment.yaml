@@ -47,9 +47,11 @@ spec:
               secretKeyRef:
                 name: redis-url
                 key: redis_url
-          {{- else }}
+          {{- else if not .Values.authorizer.redis_url }}
+          {{- if .Values.redis.install }}
           - name: "REDIS_URL"
             value: "{{- printf "redis://redis.%s.svc.cluster.local" .Release.Namespace }}"
+          {{- end }}
           {{- end }}
           {{- if .Values.authorizer.aws_access_key_id }}
           - name: "AWS_ACCESS_KEY_ID"

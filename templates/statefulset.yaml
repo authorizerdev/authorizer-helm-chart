@@ -1,4 +1,5 @@
 {{- if not .Values.authorizer.redis_url }}
+{{- if .Values.redis.install }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -30,8 +31,9 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: 'standard'
+        storageClassName: "{{ .Values.redis.storageClassName | default "standard" }}"
         resources:
           requests:
-            storage: 5Gi
+            storage: "{{ .Values.redis.storage | default "5Gi" }}"
+{{- end }}
 {{- end }}

@@ -58,12 +58,21 @@ extraEnv: []
   # - name: "ENV"
   #   value: "production"
 
+# Redis server configuration
+# If not specified standard storage class will be used with 5gi size
+redis:
+  # Install redis
+  # (if set to true will install redis)
+  install: null
+  storageClassName: null
+  storage: null
 
 authorizer:
-
   # Redis URL where sessions can be persisted
-  # (if not set k8s will create redis instance with 2Gi volume)
+  # If not set and if install is not set to true
+  # it will persist session in-memory
   redis_url: null
+
 
   # Which database you are using. Supported database
   # types are postgres, mysql, planetscale, sqlite, sqlserver,

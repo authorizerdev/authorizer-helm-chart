@@ -14,6 +14,7 @@ spec:
   selector:
     {{- include "..selectorLabels" . | nindent 4 }}
 {{- if not .Values.authorizer.redis_url }}
+{{- if .Values.redis.install }}
 ---
 apiVersion: v1
 kind: Service
@@ -29,4 +30,5 @@ spec:
     app: redis
   type: ClusterIP
   clusterIP: None
+{{- end }}
 {{- end }}
