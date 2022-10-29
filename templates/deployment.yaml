@@ -41,6 +41,48 @@ spec:
                 name: database-url
                 key: database_url
           {{- end }}
+          {{- if .Values.authorizer.database_host }}
+          - name: "DATABASE_HOST"
+            valueFrom:
+              secretKeyRef:
+                name: database-host
+                key: database_host
+          {{- end }}
+          {{- if .Values.authorizer.database_username }}
+          - name: "DATABASE_USERNAME"
+            valueFrom:
+              secretKeyRef:
+                name: database-username
+                key: database_username
+          {{- end }}
+          {{- if .Values.authorizer.database_password }}
+          - name: "DATABASE_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: database-password
+                key: database_password
+          {{- end }}
+          {{- if .Values.authorizer.database_cert }}
+          - name: "DATABASE_CERT"
+            valueFrom:
+              secretKeyRef:
+                name: database-cert
+                key: database_cert
+          {{- end }}
+          {{- if .Values.authorizer.database_cert_key }}
+          - name: "DATABASE_CERT_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: database-cert-key
+                key: database_cert_key
+          {{- end }}
+          {{- if .Values.authorizer.database_ca_cert }}
+          - name: "DATABASE_CA_CERT"
+            valueFrom:
+              secretKeyRef:
+                name: database-ca-cert
+                key: database_ca_cert
+          {{- end }}
           {{- if .Values.authorizer.redis_url }}
           - name: "REDIS_URL"
             valueFrom:

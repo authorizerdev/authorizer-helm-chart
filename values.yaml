@@ -83,6 +83,24 @@ authorizer:
   # cassandra db, you can use comma separated IPs.
   database_url: null
 
+  # Database host name
+  database_host: null
+
+  # Database username
+  database_username: null
+
+  # Database password
+  database_password: null
+
+  # Database certificate in base 64 encoded form
+  database_cert: null
+
+  # Database certificate key in base 64 encoded form
+  database_cert_key: null
+
+  # Database CA certificate in base 64 encoded form
+  database_ca_cert: null
+
   # AWS region. In case of dynamodb database_type
   aws_region: null
 
@@ -91,7 +109,3 @@ authorizer:
 
   # AWS secret access key. In case of dynamodb database_type
   aws_secret_access_key: null
-
-
-
-
