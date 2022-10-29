@@ -41,7 +41,7 @@ helm install \
 
 | Name                               | Description                                                                                                                                       | Required | Default |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
-| `authorizer.database_type`         | Type of database. Supported values `postgres, mysql, planetscale, sqlite, sqlserver, mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb` | true     |
+| `authorizer.database_type`         | Type of database. Supported values `postgres, mysql, planetscale, sqlite, sqlserver, mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb` | true     | -       |
 | `authorizer.database_url`          | Database connection string. For more information check [docs](https://docs.authorizer.dev/core/databases)                                         | true     | -       |
 | `authorizer.database_host`         | Host name for the database. Use for cassandradb & scylladb.                                                                                       | false    | -       |
 | `authorizer.database_username`     | Username for the database. Use for cassandradb & scylladb.                                                                                        | false    | -       |
