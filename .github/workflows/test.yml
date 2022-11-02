@@ -9,9 +9,9 @@ jobs:
     name: Test cluster integration
     steps:
     - uses: actions/checkout@v2
-    - name: Start minikube
-      uses: medyagh/setup-minikube@master
-    - name: Install cluster on minikube
+    - name: Create k8s Kind Cluster
+      uses: helm/kind-action@v1.3.0
+    - name: Install cluster on k8s
       run: |
         helm upgrade \
           --install \
