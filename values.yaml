@@ -37,7 +37,7 @@ securityContext:
   runAsUser: 65534 # nobody user
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
   targetPort: 8080
 
