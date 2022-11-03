@@ -30,8 +30,8 @@ podSecurityContext:
 
 securityContext:
   capabilities:
-   drop:
-   - ALL
+    drop:
+      - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65534 # nobody user
@@ -41,7 +41,8 @@ service:
   port: 80
   targetPort: 8080
 
-resources: {}
+resources:
+  {}
   # limits:
   #   cpu: 500m
   #   memory: 512Mi
@@ -55,7 +56,8 @@ affinity: {}
 
 # Add any extra configuration you need here.
 # https://docs.authorizer.dev/core/env
-extraEnv: []
+extraEnv:
+  []
   # - name: "ENV"
   #   value: "production"
 
@@ -73,7 +75,6 @@ authorizer:
   # If not set and if install is not set to true
   # it will persist session in-memory
   redis_url: null
-
 
   # Which database you are using. Supported database
   # types are postgres, mysql, planetscale, sqlite, sqlserver,
@@ -110,3 +111,6 @@ authorizer:
 
   # AWS secret access key. In case of dynamodb database_type
   aws_secret_access_key: null
+
+  # URL for authorizer deployment
+  authorizer_url: null

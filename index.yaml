@@ -3,14 +3,14 @@ entries:
   authorizer:
   - apiVersion: v2
     appVersion: 1.1.23
-    created: "2022-11-03T08:10:08.062959+05:30"
+    created: "2022-11-03T23:24:47.619691+05:30"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
       and connect to any database (Currently supports 11+ databases including Postgres,
       MySQL, SQLite, SQLServer, YugaByte, MariaDB, PlanetScale, CassandraDB, ScyllaDB,
       MongoDB, ArangoDB, DynamoDB).
-    digest: 27253e53446124424fc9e46e00f535b3f42f595d9e0ba836246399d3dc855424
+    digest: f734a749d890c118baef206690ff9fa8266da39ec74af56e54ef599f1dc9d522
     icon: https://authorizer.dev/images/logo.png
     name: authorizer
     type: application
@@ -19,7 +19,7 @@ entries:
     version: 1.1.23
   - apiVersion: v2
     appVersion: 1.1.22
-    created: "2022-11-03T08:10:08.061968+05:30"
+    created: "2022-11-03T23:24:47.618971+05:30"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -33,4 +33,4 @@ entries:
     urls:
     - https://helm-charts.authorizer.dev/charts/authorizer-1.1.22.tgz
     version: 1.1.22
-generated: "2022-11-03T08:10:08.06106+05:30"
+generated: "2022-11-03T23:24:47.617705+05:30"

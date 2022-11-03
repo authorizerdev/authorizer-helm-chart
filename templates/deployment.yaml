@@ -114,6 +114,11 @@ spec:
             value: "{{ .Values.authorizer.aws_region }}"
           {{- end }}
 
+          {{- if .Values.authorizer.authorizer_url }}
+          - name: AUTHORIZER_URL
+            value: "{{ .Values.authorizer.authorizer_url }}"
+          {{- end }}
+
           {{- if .Values.extraEnv }}
           {{- toYaml .Values.extraEnv | nindent 5 }}
           {{- end }}
