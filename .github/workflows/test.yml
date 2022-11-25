@@ -8,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Test cluster integration
     steps:
-    - uses: actions/checkout@v2
-    - name: Create k8s Kind Cluster
-      uses: helm/kind-action@v1.3.0
-    - name: Install authorizer on k8s
-      run: |
-        helm upgrade \
-          --install \
-          --namespace default \
-          --set authorizer.database_type=sqlite \
-          --set authorizer.database_url=/tmp/db \
-          --set securityContext.readOnlyRootFilesystem=false \
-          authorizer .
-    - name: Run connection test
-      run: timeout -s 9 30 helm test --namespace default authorizer
+      - uses: actions/checkout@v2
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.3.0
+      - name: Install authorizer on k8s
+        run: |
+          helm upgrade \
+            --install \
+            --namespace default \
+            --set authorizer.database_type=sqlite \
+            --set authorizer.database_url=/tmp/db \
+            --set securityContext.readOnlyRootFilesystem=false \
+            authorizer .
+      - name: Run connection test
+        run: timeout -s 30 helm test --namespace default authorizer
