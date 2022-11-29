@@ -21,4 +21,4 @@ jobs:
             --set securityContext.readOnlyRootFilesystem=false \
             authorizer .
       - name: Run connection test
-        run: timeout -s 30 helm test --namespace default authorizer
+        run: timeout -s 9 30 helm test --namespace default authorizer
