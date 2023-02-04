@@ -78,7 +78,7 @@ authorizer:
 
   # Which database you are using. Supported database
   # types are postgres, mysql, planetscale, sqlite, sqlserver,
-  # mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb, dynamodb
+  # mongodb, arangodb, yugabyte, mariadb, cassandradb, scylladb, dynamodb, couchbase
   database_type: null
 
   # Database connection string. In case of cluster url eg. for
@@ -114,3 +114,12 @@ authorizer:
 
   # URL for authorizer deployment
   authorizer_url: null
+
+  # Couchbase bucket. In case of couchbase database_type
+  couchbase_bucket: null
+
+  # Couchbase bucket ram quota. In case of couchbase database_type
+  couchbase_bucket_ram_quota: null
+
+  # Couchbase scope. In case of couchbase database_type
+  couchbase_scope: null

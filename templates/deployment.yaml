@@ -113,7 +113,18 @@ spec:
           - name: AWS_REGION
             value: "{{ .Values.authorizer.aws_region }}"
           {{- end }}
-
+          {{- if .Values.authorizer.couchbase_bucket }}
+          - name: COUCHBASE_BUCKET
+            value: "{{ .Values.authorizer.couchbase_bucket }}"
+          {{- end }}
+          {{- if .Values.authorizer.couchbase_bucket_ram_quota }}
+          - name: COUCHBASE_BUCKET_RAM_QUOTA
+            value: "{{ .Values.authorizer.couchbase_bucket_ram_quota }}"
+          {{- end }}
+          {{- if .Values.authorizer.couchbase_scope }}
+          - name: COUCHBASE_SCOPE
+            value: "{{ .Values.authorizer.couchbase_scope }}"
+          {{- end }}
           {{- if .Values.authorizer.authorizer_url }}
           - name: AUTHORIZER_URL
             value: "{{ .Values.authorizer.authorizer_url }}"
