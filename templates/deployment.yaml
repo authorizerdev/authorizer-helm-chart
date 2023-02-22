@@ -131,7 +131,7 @@ spec:
           {{- end }}
 
           {{- if .Values.extraEnv }}
-          {{- toYaml .Values.extraEnv | nindent 5 }}
+          {{- toYaml .Values.extraEnv | nindent 10 }}
           {{- end }}
           ports:
             - name: http
