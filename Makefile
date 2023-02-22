@@ -1,5 +1,6 @@
 lint:
 	helm lint .
+	helm lint --values test/extraenv.yaml .
 
 build:
 	helm package .

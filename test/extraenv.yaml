@@ -1,0 +1,6 @@
+authorizer:
+  database_type: mongodb
+  database_url: mongodb+srv://name:password@some-mongo.com
+extraEnv:
+- name: DATABASE_NAME
+  value: some_name

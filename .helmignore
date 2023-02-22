@@ -22,3 +22,9 @@
 *.tmproj
 .vscode/
 charts
+.github
+.helmignore
+Makefile
+*.md
+robots.txt
+/test
