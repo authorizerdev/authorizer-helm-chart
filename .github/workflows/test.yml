@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test cluster integration
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.3.0
       - name: Install authorizer on k8s
@@ -17,7 +17,9 @@ jobs:
             --install \
             --namespace default \
             --set authorizer.database_type=sqlite \
-            --set authorizer.database_url=/tmp/db \
+            --set authorizer.database_url="/tmp/authorizer.db" \
+            --set authorizer.client_id=test-client-id \
+            --set authorizer.client_secret=test-client-secret \
             --set securityContext.readOnlyRootFilesystem=false \
             authorizer .
       - name: Run connection test
