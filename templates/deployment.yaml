@@ -31,6 +31,113 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # v2 requires all configuration via CLI args.
+          # Use shell expansion to map env vars to CLI flags (same pattern as railway/heroku/render Dockerfiles).
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              ./authorizer \
+                --database-type="${DATABASE_TYPE}" \
+                --database-url="${DATABASE_URL}" \
+                --database-name="${DATABASE_NAME}" \
+                --database-username="${DATABASE_USERNAME}" \
+                --database-password="${DATABASE_PASSWORD}" \
+                --database-host="${DATABASE_HOST}" \
+                --database-port="${DATABASE_PORT:-0}" \
+                --database-cert="${DATABASE_CERT}" \
+                --database-ca-cert="${DATABASE_CA_CERT}" \
+                --database-cert-key="${DATABASE_CERT_KEY}" \
+                --client-id="${CLIENT_ID}" \
+                --client-secret="${CLIENT_SECRET}" \
+                --admin-secret="${ADMIN_SECRET}" \
+                --redis-url="${REDIS_URL}" \
+                --jwt-type="${JWT_TYPE}" \
+                --jwt-secret="${JWT_SECRET}" \
+                --jwt-private-key="${JWT_PRIVATE_KEY}" \
+                --jwt-public-key="${JWT_PUBLIC_KEY}" \
+                --jwt-role-claim="${JWT_ROLE_CLAIM}" \
+                --custom-access-token-script="${CUSTOM_ACCESS_TOKEN_SCRIPT}" \
+                --roles="${ROLES}" \
+                --default-roles="${DEFAULT_ROLES}" \
+                --protected-roles="${PROTECTED_ROLES}" \
+                --allowed-origins="${ALLOWED_ORIGINS}" \
+                --default-authorize-response-type="${DEFAULT_AUTHORIZE_RESPONSE_TYPE}" \
+                --default-authorize-response-mode="${DEFAULT_AUTHORIZE_RESPONSE_MODE}" \
+                --organization-name="${ORGANIZATION_NAME}" \
+                --organization-logo="${ORGANIZATION_LOGO}" \
+                --smtp-host="${SMTP_HOST}" \
+                --smtp-port="${SMTP_PORT:-0}" \
+                --smtp-username="${SMTP_USERNAME}" \
+                --smtp-password="${SMTP_PASSWORD}" \
+                --smtp-sender-email="${SENDER_EMAIL}" \
+                --smtp-sender-name="${SENDER_NAME}" \
+                --smtp-local-name="${SMTP_LOCAL_NAME}" \
+                --smtp-skip-tls-verification="${SMTP_SKIP_TLS_VERIFICATION:-false}" \
+                --reset-password-url="${RESET_PASSWORD_URL}" \
+                --env="${ENV}" \
+                --host="${HOST:-0.0.0.0}" \
+                --http-port="${PORT:-8080}" \
+                --metrics-port="${METRICS_PORT:-8081}" \
+                --log-level="${LOG_LEVEL:-info}" \
+                --enable-login-page="${ENABLE_LOGIN_PAGE:-true}" \
+                --enable-playground="${ENABLE_PLAYGROUND:-true}" \
+                --disable-admin-header-auth="${DISABLE_ADMIN_HEADER_AUTH:-true}" \
+                --enable-graphql-introspection="${ENABLE_GRAPHQL_INTROSPECTION:-true}" \
+                --app-cookie-secure="${APP_COOKIE_SECURE:-true}" \
+                --admin-cookie-secure="${ADMIN_COOKIE_SECURE:-true}" \
+                --enable-strong-password="${ENABLE_STRONG_PASSWORD:-true}" \
+                --enable-basic-authentication="${ENABLE_BASIC_AUTHENTICATION:-true}" \
+                --enable-email-verification="${ENABLE_EMAIL_VERIFICATION:-false}" \
+                --enable-mobile-basic-authentication="${ENABLE_MOBILE_BASIC_AUTHENTICATION:-true}" \
+                --enable-phone-verification="${ENABLE_PHONE_VERIFICATION:-false}" \
+                --enable-magic-link-login="${ENABLE_MAGIC_LINK_LOGIN:-false}" \
+                --enable-totp-login="${ENABLE_TOTP_LOGIN:-false}" \
+                --enforce-mfa="${ENFORCE_MFA:-true}" \
+                --enable-mfa="${ENABLE_MFA:-false}" \
+                --enable-email-otp="${ENABLE_EMAIL_OTP:-false}" \
+                --enable-sms-otp="${ENABLE_SMS_OTP:-false}" \
+                --enable-signup="${ENABLE_SIGNUP:-true}" \
+                --twilio-account-sid="${TWILIO_ACCOUNT_SID}" \
+                --twilio-api-key="${TWILIO_API_KEY}" \
+                --twilio-api-secret="${TWILIO_API_SECRET}" \
+                --twilio-sender="${TWILIO_SENDER}" \
+                --couchbase-bucket="${COUCHBASE_BUCKET}" \
+                --couchbase-scope="${COUCHBASE_SCOPE}" \
+                --couchbase-ram-quota="${COUCHBASE_RAM_QUOTA}" \
+                --aws-region="${AWS_REGION}" \
+                --aws-access-key-id="${AWS_ACCESS_KEY_ID}" \
+                --aws-secret-access-key="${AWS_SECRET_ACCESS_KEY}" \
+                --google-client-id="${GOOGLE_CLIENT_ID}" \
+                --google-client-secret="${GOOGLE_CLIENT_SECRET}" \
+                --google-scopes="${GOOGLE_SCOPES}" \
+                --github-client-id="${GITHUB_CLIENT_ID}" \
+                --github-client-secret="${GITHUB_CLIENT_SECRET}" \
+                --github-scopes="${GITHUB_SCOPES}" \
+                --facebook-client-id="${FACEBOOK_CLIENT_ID}" \
+                --facebook-client-secret="${FACEBOOK_CLIENT_SECRET}" \
+                --facebook-scopes="${FACEBOOK_SCOPES}" \
+                --microsoft-client-id="${MICROSOFT_CLIENT_ID}" \
+                --microsoft-client-secret="${MICROSOFT_CLIENT_SECRET}" \
+                --microsoft-tenant-id="${MICROSOFT_TENANT_ID}" \
+                --microsoft-scopes="${MICROSOFT_SCOPES}" \
+                --apple-client-id="${APPLE_CLIENT_ID}" \
+                --apple-client-secret="${APPLE_CLIENT_SECRET}" \
+                --apple-scopes="${APPLE_SCOPES}" \
+                --discord-client-id="${DISCORD_CLIENT_ID}" \
+                --discord-client-secret="${DISCORD_CLIENT_SECRET}" \
+                --discord-scopes="${DISCORD_SCOPES}" \
+                --linkedin-client-id="${LINKEDIN_CLIENT_ID}" \
+                --linkedin-client-secret="${LINKEDIN_CLIENT_SECRET}" \
+                --linkedin-scopes="${LINKEDIN_SCOPES}" \
+                --twitch-client-id="${TWITCH_CLIENT_ID}" \
+                --twitch-client-secret="${TWITCH_CLIENT_SECRET}" \
+                --twitch-scopes="${TWITCH_SCOPES}" \
+                --twitter-client-id="${TWITTER_CLIENT_ID}" \
+                --twitter-client-secret="${TWITTER_CLIENT_SECRET}" \
+                --twitter-scopes="${TWITTER_SCOPES}" \
+                --roblox-client-id="${ROBLOX_CLIENT_ID}" \
+                --roblox-client-secret="${ROBLOX_CLIENT_SECRET}" \
+                --roblox-scopes="${ROBLOX_SCOPES}"
           env:
           - name: "DATABASE_TYPE"
             value: "{{ .Values.authorizer.database_type }}"
@@ -41,12 +148,20 @@ spec:
                 name: database-url
                 key: database_url
           {{- end }}
+          {{- if .Values.authorizer.database_name }}
+          - name: "DATABASE_NAME"
+            value: "{{ .Values.authorizer.database_name }}"
+          {{- end }}
           {{- if .Values.authorizer.database_host }}
           - name: "DATABASE_HOST"
             valueFrom:
               secretKeyRef:
                 name: database-host
                 key: database_host
+          {{- end }}
+          {{- if .Values.authorizer.database_port }}
+          - name: "DATABASE_PORT"
+            value: "{{ .Values.authorizer.database_port }}"
           {{- end }}
           {{- if .Values.authorizer.database_username }}
           - name: "DATABASE_USERNAME"
@@ -83,6 +198,52 @@ spec:
                 name: database-ca-cert
                 key: database_ca_cert
           {{- end }}
+          {{- if .Values.authorizer.client_id }}
+          - name: "CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: client-id
+                key: client_id
+          {{- end }}
+          {{- if .Values.authorizer.client_secret }}
+          - name: "CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: client-secret
+                key: client_secret
+          {{- end }}
+          {{- if .Values.authorizer.admin_secret }}
+          - name: "ADMIN_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: admin-secret
+                key: admin_secret
+          {{- end }}
+          {{- if .Values.authorizer.jwt_type }}
+          - name: "JWT_TYPE"
+            value: "{{ .Values.authorizer.jwt_type }}"
+          {{- end }}
+          {{- if .Values.authorizer.jwt_secret }}
+          - name: "JWT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: jwt_secret
+          {{- end }}
+          {{- if .Values.authorizer.jwt_private_key }}
+          - name: "JWT_PRIVATE_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-private-key
+                key: jwt_private_key
+          {{- end }}
+          {{- if .Values.authorizer.jwt_public_key }}
+          - name: "JWT_PUBLIC_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-public-key
+                key: jwt_public_key
+          {{- end }}
           {{- if .Values.authorizer.redis_url }}
           - name: "REDIS_URL"
             valueFrom:
@@ -110,24 +271,79 @@ spec:
                 key: aws_secret_access_key
           {{- end }}
           {{- if .Values.authorizer.aws_region }}
-          - name: AWS_REGION
+          - name: "AWS_REGION"
             value: "{{ .Values.authorizer.aws_region }}"
           {{- end }}
           {{- if .Values.authorizer.couchbase_bucket }}
-          - name: COUCHBASE_BUCKET
+          - name: "COUCHBASE_BUCKET"
             value: "{{ .Values.authorizer.couchbase_bucket }}"
           {{- end }}
           {{- if .Values.authorizer.couchbase_bucket_ram_quota }}
-          - name: COUCHBASE_BUCKET_RAM_QUOTA
+          - name: "COUCHBASE_BUCKET_RAM_QUOTA"
             value: "{{ .Values.authorizer.couchbase_bucket_ram_quota }}"
           {{- end }}
           {{- if .Values.authorizer.couchbase_scope }}
-          - name: COUCHBASE_SCOPE
+          - name: "COUCHBASE_SCOPE"
             value: "{{ .Values.authorizer.couchbase_scope }}"
           {{- end }}
           {{- if .Values.authorizer.authorizer_url }}
-          - name: AUTHORIZER_URL
+          - name: "AUTHORIZER_URL"
             value: "{{ .Values.authorizer.authorizer_url }}"
+          {{- end }}
+          {{- if .Values.authorizer.twilio_account_sid }}
+          - name: "TWILIO_ACCOUNT_SID"
+            valueFrom:
+              secretKeyRef:
+                name: twilio-account-sid
+                key: twilio_account_sid
+          {{- end }}
+          {{- if .Values.authorizer.twilio_api_key }}
+          - name: "TWILIO_API_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: twilio-api-key
+                key: twilio_api_key
+          {{- end }}
+          {{- if .Values.authorizer.twilio_api_secret }}
+          - name: "TWILIO_API_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: twilio-api-secret
+                key: twilio_api_secret
+          {{- end }}
+          {{- if .Values.authorizer.twilio_sender }}
+          - name: "TWILIO_SENDER"
+            value: "{{ .Values.authorizer.twilio_sender }}"
+          {{- end }}
+          {{- if .Values.authorizer.smtp_host }}
+          - name: "SMTP_HOST"
+            value: "{{ .Values.authorizer.smtp_host }}"
+          {{- end }}
+          {{- if .Values.authorizer.smtp_port }}
+          - name: "SMTP_PORT"
+            value: "{{ .Values.authorizer.smtp_port }}"
+          {{- end }}
+          {{- if .Values.authorizer.smtp_username }}
+          - name: "SMTP_USERNAME"
+            valueFrom:
+              secretKeyRef:
+                name: smtp-username
+                key: smtp_username
+          {{- end }}
+          {{- if .Values.authorizer.smtp_password }}
+          - name: "SMTP_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: smtp-password
+                key: smtp_password
+          {{- end }}
+          {{- if .Values.authorizer.smtp_sender_email }}
+          - name: "SENDER_EMAIL"
+            value: "{{ .Values.authorizer.smtp_sender_email }}"
+          {{- end }}
+          {{- if .Values.authorizer.smtp_sender_name }}
+          - name: "SENDER_NAME"
+            value: "{{ .Values.authorizer.smtp_sender_name }}"
           {{- end }}
 
           {{- if .Values.extraEnv }}

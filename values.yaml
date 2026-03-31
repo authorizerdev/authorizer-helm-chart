@@ -54,12 +54,13 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-# Add any extra configuration you need here.
+# Add any extra environment variables here.
+# These are set on the pod and expanded in the CLI args via shell.
 # https://docs.authorizer.dev/core/env
 extraEnv:
   []
-  # - name: "ENV"
-  #   value: "production"
+  # - name: "CUSTOM_ACCESS_TOKEN_SCRIPT"
+  #   value: "my-script"
 
 # Redis server configuration
 # If not specified standard storage class will be used with 5gi size
@@ -85,8 +86,14 @@ authorizer:
   # cassandra db, you can use comma separated IPs.
   database_url: null
 
+  # Database name
+  database_name: null
+
   # Database host name
   database_host: null
+
+  # Database port
+  database_port: null
 
   # Database username
   database_username: null
@@ -123,3 +130,54 @@ authorizer:
 
   # Couchbase scope. In case of couchbase database_type
   couchbase_scope: null
+
+  # OAuth client ID (required)
+  client_id: null
+
+  # OAuth client secret (required)
+  client_secret: null
+
+  # Admin secret
+  admin_secret: null
+
+  # JWT type (e.g. HS256, RS256)
+  jwt_type: null
+
+  # JWT secret (for HMAC-based JWT)
+  jwt_secret: null
+
+  # JWT private key (for RSA/EC-based JWT)
+  jwt_private_key: null
+
+  # JWT public key (for RSA/EC-based JWT)
+  jwt_public_key: null
+
+  # Twilio Account SID for SMS support
+  twilio_account_sid: null
+
+  # Twilio API Key for SMS support
+  twilio_api_key: null
+
+  # Twilio API Secret for SMS support
+  twilio_api_secret: null
+
+  # Twilio Sender phone number for SMS support
+  twilio_sender: null
+
+  # SMTP host for email
+  smtp_host: null
+
+  # SMTP port for email
+  smtp_port: null
+
+  # SMTP username for email
+  smtp_username: null
+
+  # SMTP password for email
+  smtp_password: null
+
+  # SMTP sender email
+  smtp_sender_email: null
+
+  # SMTP sender name
+  smtp_sender_name: null
