@@ -78,6 +78,14 @@ spec:
                 --host="${HOST:-0.0.0.0}" \
                 --http-port="${PORT:-8080}" \
                 --metrics-port="${METRICS_PORT:-8081}" \
+                --trusted-proxies="${TRUSTED_PROXIES}" \
+                --refresh-token-expires-in="${REFRESH_TOKEN_EXPIRES_IN:-2592000}" \
+                --enable-hsts="${ENABLE_HSTS:-false}" \
+                --disable-csp="${DISABLE_CSP:-false}" \
+                --graphql-max-complexity="${GRAPHQL_MAX_COMPLEXITY:-300}" \
+                --graphql-max-depth="${GRAPHQL_MAX_DEPTH:-15}" \
+                --graphql-max-aliases="${GRAPHQL_MAX_ALIASES:-30}" \
+                --graphql-max-body-bytes="${GRAPHQL_MAX_BODY_BYTES:-1048576}" \
                 --log-level="${LOG_LEVEL:-info}" \
                 --enable-login-page="${ENABLE_LOGIN_PAGE:-true}" \
                 --enable-playground="${ENABLE_PLAYGROUND:-true}" \
@@ -345,6 +353,29 @@ spec:
           - name: "SENDER_NAME"
             value: "{{ .Values.authorizer.smtp_sender_name }}"
           {{- end }}
+
+          # April 2026 security hardening flags. See values.yaml for the
+          # operational notes attached to each one.
+          {{- if .Values.authorizer.trusted_proxies }}
+          - name: "TRUSTED_PROXIES"
+            value: {{ .Values.authorizer.trusted_proxies | quote }}
+          {{- end }}
+          {{- if .Values.authorizer.refresh_token_expires_in }}
+          - name: "REFRESH_TOKEN_EXPIRES_IN"
+            value: {{ .Values.authorizer.refresh_token_expires_in | toString | quote }}
+          {{- end }}
+          - name: "ENABLE_HSTS"
+            value: {{ .Values.authorizer.enable_hsts | default false | toString | quote }}
+          - name: "DISABLE_CSP"
+            value: {{ .Values.authorizer.disable_csp | default false | toString | quote }}
+          - name: "GRAPHQL_MAX_COMPLEXITY"
+            value: {{ .Values.authorizer.graphql_max_complexity | default 300 | toString | quote }}
+          - name: "GRAPHQL_MAX_DEPTH"
+            value: {{ .Values.authorizer.graphql_max_depth | default 15 | toString | quote }}
+          - name: "GRAPHQL_MAX_ALIASES"
+            value: {{ .Values.authorizer.graphql_max_aliases | default 30 | toString | quote }}
+          - name: "GRAPHQL_MAX_BODY_BYTES"
+            value: {{ int64 (default 1048576 .Values.authorizer.graphql_max_body_bytes) | toString | quote }}
 
           {{- if .Values.extraEnv }}
           {{- toYaml .Values.extraEnv | nindent 10 }}

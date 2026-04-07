@@ -137,7 +137,11 @@ authorizer:
   # OAuth client secret (required)
   client_secret: null
 
-  # Admin secret
+  # Admin secret (--admin-secret).
+  # REQUIRED, non-empty. As of the April 2026 security release the
+  # authorizer binary refuses to start when --admin-secret is empty —
+  # the previous insecure "password" default has been removed. Pick any
+  # non-empty value; the strength of the secret is your responsibility.
   admin_secret: null
 
   # JWT type (e.g. HS256, RS256)
@@ -181,3 +185,39 @@ authorizer:
 
   # SMTP sender name
   smtp_sender_name: null
+
+  # ----------------------------------------------------------------------
+  # April 2026 security hardening flags
+  # ----------------------------------------------------------------------
+
+  # Trusted reverse-proxy networks (--trusted-proxies). Comma-separated CIDRs.
+  # Empty (the default) means gin uses RemoteAddr and ignores X-Forwarded-For
+  # — safe out of the box. If Authorizer is behind an ingress controller,
+  # nginx, Cloudflare, etc., set this to the proxy network or per-IP rate
+  # limiting and audit logs will key on the proxy IP. See
+  # https://docs.authorizer.dev/core/security#trusted-proxies
+  trusted_proxies: null
+
+  # Refresh-token lifetime in seconds (--refresh-token-expires-in).
+  # Default 30 days (2592000). Shorten for higher-security deployments;
+  # lengthen for long-lived sessions.
+  refresh_token_expires_in: null
+
+  # Strict-Transport-Security response header (--enable-hsts).
+  # Off by default — only enable behind TLS, otherwise browsers will be
+  # locked out for a year (max-age=31536000).
+  enable_hsts: false
+
+  # Disable the default Content-Security-Policy header (--disable-csp).
+  # CSP is on by default with a conservative policy. Set true ONLY as an
+  # escape hatch if the default policy breaks a customised dashboard.
+  disable_csp: false
+
+  # GraphQL query limits (--graphql-max-*). Defaults are conservative;
+  # raise individually if your legitimate operation surface needs them.
+  # Rejections are emitted as the authorizer_graphql_limit_rejections_total
+  # Prometheus counter, labelled by the limit kind that tripped.
+  graphql_max_complexity: 300
+  graphql_max_depth: 15
+  graphql_max_aliases: 30
+  graphql_max_body_bytes: 1048576
