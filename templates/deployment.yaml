@@ -78,6 +78,10 @@ spec:
                 --host="${HOST:-0.0.0.0}" \
                 --http-port="${PORT:-8080}" \
                 --metrics-port="${METRICS_PORT:-8081}" \
+                --metrics-host="${METRICS_HOST:-0.0.0.0}" \
+                --rate-limit-rps="${RATE_LIMIT_RPS}" \
+                --rate-limit-burst="${RATE_LIMIT_BURST}" \
+                --rate-limit-fail-closed="${RATE_LIMIT_FAIL_CLOSED}" \
                 --trusted-proxies="${TRUSTED_PROXIES}" \
                 --refresh-token-expires-in="${REFRESH_TOKEN_EXPIRES_IN:-2592000}" \
                 --enable-hsts="${ENABLE_HSTS:-false}" \
@@ -92,6 +96,7 @@ spec:
                 --disable-admin-header-auth="${DISABLE_ADMIN_HEADER_AUTH:-true}" \
                 --enable-graphql-introspection="${ENABLE_GRAPHQL_INTROSPECTION:-true}" \
                 --app-cookie-secure="${APP_COOKIE_SECURE:-true}" \
+                --app-cookie-same-site="${APP_COOKIE_SAME_SITE:-none}" \
                 --admin-cookie-secure="${ADMIN_COOKIE_SECURE:-true}" \
                 --enable-strong-password="${ENABLE_STRONG_PASSWORD:-true}" \
                 --enable-basic-authentication="${ENABLE_BASIC_AUTHENTICATION:-true}" \
@@ -298,6 +303,18 @@ spec:
           - name: "AUTHORIZER_URL"
             value: "{{ .Values.authorizer.authorizer_url }}"
           {{- end }}
+          - name: "PORT"
+            value: "{{ .Values.authorizer.http_port | default 8080 }}"
+          - name: "METRICS_PORT"
+            value: "{{ .Values.authorizer.metrics_port | default 8081 }}"
+          - name: "METRICS_HOST"
+            value: {{ .Values.authorizer.metrics_host | default "0.0.0.0" | quote }}
+          - name: "RATE_LIMIT_RPS"
+            value: {{ .Values.authorizer.rate_limit_rps | default 30 | toString | quote }}
+          - name: "RATE_LIMIT_BURST"
+            value: {{ .Values.authorizer.rate_limit_burst | default 20 | toString | quote }}
+          - name: "RATE_LIMIT_FAIL_CLOSED"
+            value: {{ .Values.authorizer.rate_limit_fail_closed | default false | toString | quote }}
           {{- if .Values.authorizer.twilio_account_sid }}
           - name: "TWILIO_ACCOUNT_SID"
             valueFrom:
@@ -382,15 +399,18 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ int (.Values.authorizer.http_port | default 8080) }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ int (.Values.authorizer.metrics_port | default 8081) }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /readyz
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
