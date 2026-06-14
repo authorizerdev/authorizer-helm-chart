@@ -47,6 +47,8 @@ spec:
                 --database-cert="${DATABASE_CERT}" \
                 --database-ca-cert="${DATABASE_CA_CERT}" \
                 --database-cert-key="${DATABASE_CERT_KEY}" \
+                --fga-store="${FGA_STORE}" \
+                --fga-store-url="${FGA_STORE_URL}" \
                 --client-id="${CLIENT_ID}" \
                 --client-secret="${CLIENT_SECRET}" \
                 --admin-secret="${ADMIN_SECRET}" \
@@ -56,6 +58,10 @@ spec:
                 --jwt-private-key="${JWT_PRIVATE_KEY}" \
                 --jwt-public-key="${JWT_PUBLIC_KEY}" \
                 --jwt-role-claim="${JWT_ROLE_CLAIM}" \
+                --jwt-secondary-type="${JWT_SECONDARY_TYPE}" \
+                --jwt-secondary-secret="${JWT_SECONDARY_SECRET}" \
+                --jwt-secondary-private-key="${JWT_SECONDARY_PRIVATE_KEY}" \
+                --jwt-secondary-public-key="${JWT_SECONDARY_PUBLIC_KEY}" \
                 --custom-access-token-script="${CUSTOM_ACCESS_TOKEN_SCRIPT}" \
                 --roles="${ROLES}" \
                 --default-roles="${DEFAULT_ROLES}" \
@@ -74,11 +80,17 @@ spec:
                 --smtp-local-name="${SMTP_LOCAL_NAME}" \
                 --smtp-skip-tls-verification="${SMTP_SKIP_TLS_VERIFICATION:-false}" \
                 --reset-password-url="${RESET_PASSWORD_URL}" \
+                --backchannel-logout-uri="${BACKCHANNEL_LOGOUT_URI}" \
                 --env="${ENV}" \
                 --host="${HOST:-0.0.0.0}" \
                 --http-port="${PORT:-8080}" \
                 --metrics-port="${METRICS_PORT:-8081}" \
                 --metrics-host="${METRICS_HOST:-0.0.0.0}" \
+                --grpc-port="${GRPC_PORT:-9091}" \
+                --enable-grpc-reflection="${ENABLE_GRPC_REFLECTION:-true}" \
+                --grpc-insecure="${GRPC_INSECURE:-false}" \
+                --grpc-tls-cert="${GRPC_TLS_CERT}" \
+                --grpc-tls-key="${GRPC_TLS_KEY}" \
                 --rate-limit-rps="${RATE_LIMIT_RPS}" \
                 --rate-limit-burst="${RATE_LIMIT_BURST}" \
                 --rate-limit-fail-closed="${RATE_LIMIT_FAIL_CLOSED}" \
@@ -315,6 +327,21 @@ spec:
             value: {{ .Values.authorizer.rate_limit_burst | default 20 | toString | quote }}
           - name: "RATE_LIMIT_FAIL_CLOSED"
             value: {{ .Values.authorizer.rate_limit_fail_closed | default false | toString | quote }}
+          # gRPC listener (--grpc-port). Exposed on its own Service port (see service.yaml).
+          - name: "GRPC_PORT"
+            value: {{ .Values.authorizer.grpc_port | default 9091 | toString | quote }}
+          - name: "ENABLE_GRPC_REFLECTION"
+            value: {{ .Values.authorizer.enable_grpc_reflection | default true | toString | quote }}
+          - name: "GRPC_INSECURE"
+            value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
+          {{- if .Values.authorizer.grpc_tls_cert }}
+          - name: "GRPC_TLS_CERT"
+            value: "{{ .Values.authorizer.grpc_tls_cert }}"
+          {{- end }}
+          {{- if .Values.authorizer.grpc_tls_key }}
+          - name: "GRPC_TLS_KEY"
+            value: "{{ .Values.authorizer.grpc_tls_key }}"
+          {{- end }}
           {{- if .Values.authorizer.twilio_account_sid }}
           - name: "TWILIO_ACCOUNT_SID"
             valueFrom:
@@ -403,6 +430,9 @@ spec:
               protocol: TCP
             - name: metrics
               containerPort: {{ int (.Values.authorizer.metrics_port | default 8081) }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ int (.Values.authorizer.grpc_port | default 9091) }}
               protocol: TCP
           livenessProbe:
             httpGet:

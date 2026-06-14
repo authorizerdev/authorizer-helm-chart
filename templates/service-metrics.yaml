@@ -1,0 +1,18 @@
+{{- if or .Values.metrics.service.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "..fullname" . }}-metrics
+  labels:
+    {{- include "..labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ int (.Values.authorizer.metrics_port | default 8081) }}
+      targetPort: metrics
+      name: metrics
+      protocol: TCP
+  selector:
+    {{- include "..selectorLabels" . | nindent 4 }}
+{{- end }}

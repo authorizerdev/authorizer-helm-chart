@@ -86,7 +86,37 @@ helm install \
 | `authorizer.smtp_sender_email`          | SMTP sender email address.                                                                                                                                 | false    | -       |
 | `authorizer.smtp_sender_name`           | SMTP sender display name.                                                                                                                                  | false    | -       |
 | `authorizer.authorizer_url`             | URL for authorizer deployment.                                                                                                                             | false    | -       |
+| `authorizer.http_port`                  | Main HTTP listen port (`--http-port`). Must differ from `metrics_port`.                                                                                     | false    | `8080`  |
+| `authorizer.metrics_port`               | Dedicated Prometheus `/metrics` port (`--metrics-port`).                                                                                                   | false    | `8081`  |
+| `authorizer.metrics_host`               | Bind address for `/metrics` (`--metrics-host`). Default `0.0.0.0` so in-cluster scrapers can reach the pod; do not expose this port on a public Ingress.   | false    | `0.0.0.0` |
+| `authorizer.grpc_port`                  | gRPC listen port (`--grpc-port`). Serves the same public API over gRPC; must differ from `http_port` and `metrics_port`.                                     | false    | `9091`  |
+| `authorizer.enable_grpc_reflection`     | Enable gRPC server reflection (`--enable-grpc-reflection`). Turn off to lock down production.                                                                 | false    | `true`  |
+| `authorizer.grpc_insecure`              | Run gRPC without TLS (`--grpc-insecure`). Default `true` for in-cluster plaintext; set `false` and provide certs for native TLS.                              | false    | `true`  |
+| `authorizer.grpc_tls_cert`              | Path (in-container) to the gRPC TLS certificate (`--grpc-tls-cert`).                                                                                          | false    | -       |
+| `authorizer.grpc_tls_key`               | Path (in-container) to the gRPC TLS private key (`--grpc-tls-key`).                                                                                           | false    | -       |
+| `service.grpc.enabled`                  | Expose the gRPC listener as a `grpc` port on the main `Service`.                                                                                             | false    | `true`  |
+| `service.grpc.port`                     | `Service` port for gRPC. Defaults to `authorizer.grpc_port`.                                                                                                 | false    | `9091`  |
+| `authorizer.rate_limit_rps`             | Per-IP sustained RPS (`--rate-limit-rps`). `0` disables rate limiting.                                                                                        | false    | `30`    |
+| `authorizer.rate_limit_burst`           | Per-IP burst allowance (`--rate-limit-burst`).                                                                                                               | false    | `20`    |
+| `authorizer.rate_limit_fail_closed`     | If `true`, rate-limit backend errors return **503** (`--rate-limit-fail-closed`).                                                                            | false    | `false` |
+| `metrics.service.enabled`               | Create a **ClusterIP** `Service` (`*-metrics`) targeting the metrics port for internal scraping only.                                                        | false    | `false` |
+| `metrics.serviceMonitor.enabled`        | Create a `ServiceMonitor` (Prometheus Operator). Implies the metrics `Service` above.                                                                       | false    | `false` |
+| `metrics.serviceMonitor.interval`       | Scrape interval for `ServiceMonitor`.                                                                                                                      | false    | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout`  | Scrape timeout for `ServiceMonitor`.                                                                                                                       | false    | `10s`   |
+| `metrics.serviceMonitor.labels`         | Extra labels on the `ServiceMonitor` (e.g. release selector for your Prometheus stack).                                                                    | false    | `{}`    |
 | `extraEnv`                              | Extra environment variables (e.g. feature flags, OAuth providers). Check [docs](https://docs.authorizer.dev/core/env) for all options.                     | false    | `[]`    |
+
+#### Prometheus metrics (v2)
+
+Authorizer serves **`/metrics` only on a separate HTTP listener** (default port **8081**), not on the main app port. This chart:
+
+- Sets **`METRICS_HOST=0.0.0.0`** by default so Prometheus (or kube-prometheus) can scrape the pod from the cluster network.
+- Declares **containerPort** `8080` (http) and **8081** (metrics).
+- Does **not** add port **8081** to the main `Service` used for Ingress — keep metrics off public load balancers.
+- Optionally creates **`metrics.service.enabled`**: internal **ClusterIP** `Service` `{{ release }}-authorizer-metrics`.
+- Optionally creates **`metrics.serviceMonitor.enabled`**: `ServiceMonitor` for the Prometheus Operator.
+
+Do **not** duplicate `PORT`, `METRICS_PORT`, `METRICS_HOST`, `RATE_LIMIT_RPS`, `RATE_LIMIT_BURST`, or `RATE_LIMIT_FAIL_CLOSED` in `extraEnv` (Kubernetes rejects duplicate env var names).
 
 #### Feature Flags and OAuth Providers via extraEnv
 

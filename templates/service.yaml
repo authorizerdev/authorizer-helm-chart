@@ -8,9 +8,15 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
+      targetPort: {{ .Values.authorizer.http_port | default .Values.service.targetPort }}
       protocol: TCP
       name: http
+    {{- if .Values.service.grpc.enabled }}
+    - port: {{ .Values.service.grpc.port | default (.Values.authorizer.grpc_port | default 9091) }}
+      targetPort: {{ .Values.authorizer.grpc_port | default 9091 }}
+      protocol: TCP
+      name: grpc
+    {{- end }}
   selector:
     {{- include "..selectorLabels" . | nindent 4 }}
 {{- if not .Values.authorizer.redis_url }}

@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: lakhansamani/authorizer
+  repository: quay.io/authorizer/authorizer
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -39,7 +39,27 @@ securityContext:
 service:
   type: ClusterIP
   port: 80
+  # Fallback if authorizer.http_port is unset (keep in sync with app listen port).
   targetPort: 8080
+  # gRPC listener exposure (--grpc-port). The app serves the same public API
+  # over gRPC; enable to add a `grpc` port to the Service. Disable if you only
+  # consume the HTTP/GraphQL/REST surface.
+  grpc:
+    enabled: true
+    # Service port for gRPC. Defaults to authorizer.grpc_port (9091).
+    port: 9091
+
+# Optional Prometheus Operator integration and internal metrics Service.
+# The app always exposes a dedicated /metrics listener on metrics_port (default 8081).
+metrics:
+  service:
+    # ClusterIP Service for scraping (not exposed on Ingress by default).
+    enabled: false
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
 
 resources:
   {}
@@ -72,6 +92,36 @@ redis:
   storage: null
 
 authorizer:
+  # Main HTTP listen port (--http-port). Must differ from metrics_port.
+  http_port: 8080
+
+  # Dedicated Prometheus /metrics listener (--metrics-port).
+  metrics_port: 8081
+
+  # Bind address for /metrics (--metrics-host). Use 0.0.0.0 for in-cluster scraping.
+  metrics_host: "0.0.0.0"
+
+  # gRPC server (--grpc-port, --enable-grpc-reflection, --grpc-insecure,
+  # --grpc-tls-cert, --grpc-tls-key). The same public API is served over gRPC;
+  # the REST gateway (/v1/*) wraps it in-process. Must differ from http_port
+  # and metrics_port. Set service.grpc.enabled to expose it on the Service.
+  grpc_port: 9091
+  enable_grpc_reflection: true
+  # Run gRPC without TLS. Leave true for in-cluster plaintext (mTLS handled by
+  # a mesh, or terminated at an ingress). Set false and provide certs for
+  # native TLS.
+  grpc_insecure: true
+  # Paths (inside the container) to the gRPC TLS cert/key. Mount via extraEnv +
+  # volumes if using native TLS.
+  grpc_tls_cert: null
+  grpc_tls_key: null
+
+  # Per-IP rate limiting (--rate-limit-rps, --rate-limit-burst, --rate-limit-fail-closed).
+  # With redis_url (or chart-bundled Redis), limits are shared across replicas.
+  rate_limit_rps: 30
+  rate_limit_burst: 20
+  rate_limit_fail_closed: false
+
   # Redis URL where sessions can be persisted
   # If not set and if install is not set to true
   # it will persist session in-memory

@@ -1,3 +1,13 @@
+Prometheus: `/metrics` is on a dedicated port (default 8081). The main Service does not expose it.
+{{- if .Values.service.grpc.enabled }}
+gRPC: the public API is also served over gRPC on port {{ .Values.authorizer.grpc_port | default 9091 }} (Service port `grpc`). Disable with `service.grpc.enabled=false`.
+{{- end }}
+{{- if or .Values.metrics.service.enabled .Values.metrics.serviceMonitor.enabled }}
+  Internal metrics Service: {{ include "..fullname" . }}-metrics (ClusterIP, port {{ .Values.authorizer.metrics_port | default 8081 }})
+{{- else }}
+  Enable metrics.service.enabled or metrics.serviceMonitor.enabled for a ClusterIP Service + optional ServiceMonitor.
+{{- end }}
+
 1. Get the application URL by running these commands:
 {{- if contains "NodePort" .Values.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "..fullname" . }})
