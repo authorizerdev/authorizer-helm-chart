@@ -421,6 +421,303 @@ spec:
           - name: "GRAPHQL_MAX_BODY_BYTES"
             value: {{ int64 (default 1048576 .Values.authorizer.graphql_max_body_bytes) | toString | quote }}
 
+          # FGA (OpenFGA) integration
+          {{- if .Values.authorizer.fga_store }}
+          - name: "FGA_STORE"
+            valueFrom:
+              secretKeyRef:
+                name: fga-store
+                key: fga_store
+          {{- end }}
+          {{- if .Values.authorizer.fga_store_url }}
+          - name: "FGA_STORE_URL"
+            valueFrom:
+              secretKeyRef:
+                name: fga-store-url
+                key: fga_store_url
+          {{- end }}
+
+          # JWT additional config
+          {{- if .Values.authorizer.jwt_role_claim }}
+          - name: "JWT_ROLE_CLAIM"
+            value: "{{ .Values.authorizer.jwt_role_claim }}"
+          {{- end }}
+          {{- if .Values.authorizer.jwt_secondary_type }}
+          - name: "JWT_SECONDARY_TYPE"
+            value: "{{ .Values.authorizer.jwt_secondary_type }}"
+          {{- end }}
+          {{- if .Values.authorizer.jwt_secondary_secret }}
+          - name: "JWT_SECONDARY_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secondary-secret
+                key: jwt_secondary_secret
+          {{- end }}
+          {{- if .Values.authorizer.jwt_secondary_private_key }}
+          - name: "JWT_SECONDARY_PRIVATE_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secondary-private-key
+                key: jwt_secondary_private_key
+          {{- end }}
+          {{- if .Values.authorizer.jwt_secondary_public_key }}
+          - name: "JWT_SECONDARY_PUBLIC_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secondary-public-key
+                key: jwt_secondary_public_key
+          {{- end }}
+
+          # Custom access token script
+          {{- if .Values.authorizer.custom_access_token_script }}
+          - name: "CUSTOM_ACCESS_TOKEN_SCRIPT"
+            value: {{ .Values.authorizer.custom_access_token_script | quote }}
+          {{- end }}
+
+          # Access control
+          {{- if .Values.authorizer.roles }}
+          - name: "ROLES"
+            value: "{{ .Values.authorizer.roles }}"
+          {{- end }}
+          {{- if .Values.authorizer.default_roles }}
+          - name: "DEFAULT_ROLES"
+            value: "{{ .Values.authorizer.default_roles }}"
+          {{- end }}
+          {{- if .Values.authorizer.protected_roles }}
+          - name: "PROTECTED_ROLES"
+            value: "{{ .Values.authorizer.protected_roles }}"
+          {{- end }}
+          {{- if .Values.authorizer.allowed_origins }}
+          - name: "ALLOWED_ORIGINS"
+            value: "{{ .Values.authorizer.allowed_origins }}"
+          {{- end }}
+
+          # OAuth response config
+          {{- if .Values.authorizer.default_authorize_response_type }}
+          - name: "DEFAULT_AUTHORIZE_RESPONSE_TYPE"
+            value: "{{ .Values.authorizer.default_authorize_response_type }}"
+          {{- end }}
+          {{- if .Values.authorizer.default_authorize_response_mode }}
+          - name: "DEFAULT_AUTHORIZE_RESPONSE_MODE"
+            value: "{{ .Values.authorizer.default_authorize_response_mode }}"
+          {{- end }}
+
+          # Branding
+          {{- if .Values.authorizer.organization_name }}
+          - name: "ORGANIZATION_NAME"
+            value: "{{ .Values.authorizer.organization_name }}"
+          {{- end }}
+          {{- if .Values.authorizer.organization_logo }}
+          - name: "ORGANIZATION_LOGO"
+            value: "{{ .Values.authorizer.organization_logo }}"
+          {{- end }}
+
+          # SMTP additional options
+          {{- if .Values.authorizer.smtp_local_name }}
+          - name: "SMTP_LOCAL_NAME"
+            value: "{{ .Values.authorizer.smtp_local_name }}"
+          {{- end }}
+          {{- if .Values.authorizer.smtp_skip_tls_verification }}
+          - name: "SMTP_SKIP_TLS_VERIFICATION"
+            value: {{ .Values.authorizer.smtp_skip_tls_verification | toString | quote }}
+          {{- end }}
+
+          # URL configuration
+          {{- if .Values.authorizer.reset_password_url }}
+          - name: "RESET_PASSWORD_URL"
+            value: "{{ .Values.authorizer.reset_password_url }}"
+          {{- end }}
+          {{- if .Values.authorizer.backchannel_logout_uri }}
+          - name: "BACKCHANNEL_LOGOUT_URI"
+            value: "{{ .Values.authorizer.backchannel_logout_uri }}"
+          {{- end }}
+
+          # OAuth providers
+          {{- if .Values.authorizer.google_client_id }}
+          - name: "GOOGLE_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: google-client-id
+                key: google_client_id
+          {{- end }}
+          {{- if .Values.authorizer.google_client_secret }}
+          - name: "GOOGLE_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: google-client-secret
+                key: google_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.google_scopes }}
+          - name: "GOOGLE_SCOPES"
+            value: "{{ .Values.authorizer.google_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.github_client_id }}
+          - name: "GITHUB_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: github-client-id
+                key: github_client_id
+          {{- end }}
+          {{- if .Values.authorizer.github_client_secret }}
+          - name: "GITHUB_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: github-client-secret
+                key: github_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.github_scopes }}
+          - name: "GITHUB_SCOPES"
+            value: "{{ .Values.authorizer.github_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.facebook_client_id }}
+          - name: "FACEBOOK_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: facebook-client-id
+                key: facebook_client_id
+          {{- end }}
+          {{- if .Values.authorizer.facebook_client_secret }}
+          - name: "FACEBOOK_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: facebook-client-secret
+                key: facebook_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.facebook_scopes }}
+          - name: "FACEBOOK_SCOPES"
+            value: "{{ .Values.authorizer.facebook_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.microsoft_client_id }}
+          - name: "MICROSOFT_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: microsoft-client-id
+                key: microsoft_client_id
+          {{- end }}
+          {{- if .Values.authorizer.microsoft_client_secret }}
+          - name: "MICROSOFT_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: microsoft-client-secret
+                key: microsoft_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.microsoft_tenant_id }}
+          - name: "MICROSOFT_TENANT_ID"
+            value: "{{ .Values.authorizer.microsoft_tenant_id }}"
+          {{- end }}
+          {{- if .Values.authorizer.microsoft_scopes }}
+          - name: "MICROSOFT_SCOPES"
+            value: "{{ .Values.authorizer.microsoft_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.apple_client_id }}
+          - name: "APPLE_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: apple-client-id
+                key: apple_client_id
+          {{- end }}
+          {{- if .Values.authorizer.apple_client_secret }}
+          - name: "APPLE_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: apple-client-secret
+                key: apple_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.apple_scopes }}
+          - name: "APPLE_SCOPES"
+            value: "{{ .Values.authorizer.apple_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.discord_client_id }}
+          - name: "DISCORD_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: discord-client-id
+                key: discord_client_id
+          {{- end }}
+          {{- if .Values.authorizer.discord_client_secret }}
+          - name: "DISCORD_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: discord-client-secret
+                key: discord_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.discord_scopes }}
+          - name: "DISCORD_SCOPES"
+            value: "{{ .Values.authorizer.discord_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.linkedin_client_id }}
+          - name: "LINKEDIN_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: linkedin-client-id
+                key: linkedin_client_id
+          {{- end }}
+          {{- if .Values.authorizer.linkedin_client_secret }}
+          - name: "LINKEDIN_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: linkedin-client-secret
+                key: linkedin_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.linkedin_scopes }}
+          - name: "LINKEDIN_SCOPES"
+            value: "{{ .Values.authorizer.linkedin_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.twitch_client_id }}
+          - name: "TWITCH_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: twitch-client-id
+                key: twitch_client_id
+          {{- end }}
+          {{- if .Values.authorizer.twitch_client_secret }}
+          - name: "TWITCH_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: twitch-client-secret
+                key: twitch_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.twitch_scopes }}
+          - name: "TWITCH_SCOPES"
+            value: "{{ .Values.authorizer.twitch_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.twitter_client_id }}
+          - name: "TWITTER_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: twitter-client-id
+                key: twitter_client_id
+          {{- end }}
+          {{- if .Values.authorizer.twitter_client_secret }}
+          - name: "TWITTER_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: twitter-client-secret
+                key: twitter_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.twitter_scopes }}
+          - name: "TWITTER_SCOPES"
+            value: "{{ .Values.authorizer.twitter_scopes }}"
+          {{- end }}
+          {{- if .Values.authorizer.roblox_client_id }}
+          - name: "ROBLOX_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: roblox-client-id
+                key: roblox_client_id
+          {{- end }}
+          {{- if .Values.authorizer.roblox_client_secret }}
+          - name: "ROBLOX_CLIENT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: roblox-client-secret
+                key: roblox_client_secret
+          {{- end }}
+          {{- if .Values.authorizer.roblox_scopes }}
+          - name: "ROBLOX_SCOPES"
+            value: "{{ .Values.authorizer.roblox_scopes }}"
+          {{- end }}
+
           {{- if .Values.extraEnv }}
           {{- toYaml .Values.extraEnv | nindent 10 }}
           {{- end }}

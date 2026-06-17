@@ -20,6 +20,9 @@ jobs:
             --set authorizer.database_url="/tmp/authorizer.db" \
             --set authorizer.client_id=test-client-id \
             --set authorizer.client_secret=test-client-secret \
+            --set authorizer.admin_secret=test-admin-secret \
+            --set authorizer.jwt_type=HS256 \
+            --set authorizer.jwt_secret=test-secret \
             --set securityContext.readOnlyRootFilesystem=false \
             authorizer .
       - name: Run connection test

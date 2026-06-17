@@ -271,3 +271,81 @@ authorizer:
   graphql_max_depth: 15
   graphql_max_aliases: 30
   graphql_max_body_bytes: 1048576
+
+  # FGA (OpenFGA) integration
+  fga_store: null
+  fga_store_url: null
+
+  # JWT additional config
+  jwt_role_claim: null
+  jwt_secondary_type: null
+  jwt_secondary_secret: null
+  jwt_secondary_private_key: null
+  jwt_secondary_public_key: null
+
+  # Custom access token script (JavaScript, URL-encoded)
+  custom_access_token_script: null
+
+  # Access control (comma-separated values)
+  roles: null
+  default_roles: null
+  protected_roles: null
+  allowed_origins: null
+
+  # OAuth response config
+  default_authorize_response_type: null
+  default_authorize_response_mode: null
+
+  # Branding
+  organization_name: null
+  organization_logo: null
+
+  # SMTP additional options
+  smtp_local_name: null
+  smtp_skip_tls_verification: false
+
+  # URL configuration
+  reset_password_url: null
+  backchannel_logout_uri: null
+
+  # OAuth providers
+  google_client_id: null
+  google_client_secret: null
+  google_scopes: null
+
+  github_client_id: null
+  github_client_secret: null
+  github_scopes: null
+
+  facebook_client_id: null
+  facebook_client_secret: null
+  facebook_scopes: null
+
+  microsoft_client_id: null
+  microsoft_client_secret: null
+  microsoft_tenant_id: null
+  microsoft_scopes: null
+
+  apple_client_id: null
+  apple_client_secret: null
+  apple_scopes: null
+
+  discord_client_id: null
+  discord_client_secret: null
+  discord_scopes: null
+
+  linkedin_client_id: null
+  linkedin_client_secret: null
+  linkedin_scopes: null
+
+  twitch_client_id: null
+  twitch_client_secret: null
+  twitch_scopes: null
+
+  twitter_client_id: null
+  twitter_client_secret: null
+  twitter_scopes: null
+
+  roblox_client_id: null
+  roblox_client_secret: null
+  roblox_scopes: null
