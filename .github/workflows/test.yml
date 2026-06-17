@@ -15,6 +15,8 @@ jobs:
         run: |
           helm upgrade \
             --install \
+            --wait \
+            --timeout 120s \
             --namespace default \
             --set authorizer.database_type=sqlite \
             --set authorizer.database_url="/tmp/authorizer.db" \

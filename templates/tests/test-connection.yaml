@@ -10,6 +10,15 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['{{ include "..fullname" . }}:{{ .Values.service.port }}']
+      command:
+        - sh
+        - -c
+        - |
+          for i in $(seq 1 30); do
+            wget -qO- http://{{ include "..fullname" . }}:{{ .Values.service.port }}/healthz && exit 0
+            echo "Waiting for authorizer..."
+            sleep 2
+          done
+          echo "Timed out waiting for authorizer"
+          exit 1
   restartPolicy: Never
