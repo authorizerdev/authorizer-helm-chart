@@ -92,6 +92,9 @@ redis:
   storage: null
 
 authorizer:
+  # Host address to listen on (--host).
+  host: "0.0.0.0"
+
   # Main HTTP listen port (--http-port). Must differ from metrics_port.
   http_port: 8080
 
@@ -100,6 +103,12 @@ authorizer:
 
   # Bind address for /metrics (--metrics-host). Use 0.0.0.0 for in-cluster scraping.
   metrics_host: "0.0.0.0"
+
+  # Log level (--log-level): debug, info, warn, error.
+  log_level: "info"
+
+  # Environment label for this instance (--env), e.g. "production", "staging".
+  env: null
 
   # gRPC server (--grpc-port, --enable-grpc-reflection, --grpc-insecure,
   # --grpc-tls-cert, --grpc-tls-key). The same public API is served over gRPC;
@@ -272,6 +281,45 @@ authorizer:
   graphql_max_aliases: 30
   graphql_max_body_bytes: 1048576
 
+  # ----------------------------------------------------------------------
+  # HTTP routes / cookies / auth feature toggles
+  # ----------------------------------------------------------------------
+
+  enable_login_page: true
+  # Public organization (home-realm) discovery endpoint + /app email-first
+  # SSO routing step (--enable-org-discovery). Opt-in; off keeps the login
+  # page unchanged.
+  enable_org_discovery: false
+  enable_playground: true
+  enable_graphql_introspection: true
+
+  # Disable admin authentication via the X-Authorizer-Admin-Secret header
+  # (--disable-admin-header-auth). true (default here) requires session/
+  # cookie-based admin auth instead of the static header secret.
+  disable_admin_header_auth: true
+
+  app_cookie_secure: true
+  # SameSite attribute for session cookies (lax, strict, none).
+  app_cookie_same_site: "none"
+  admin_cookie_secure: true
+
+  enable_strong_password: true
+  enable_basic_authentication: true
+  enable_email_verification: false
+  enable_mobile_basic_authentication: true
+  enable_phone_verification: false
+  enable_magic_link_login: false
+  enable_signup: true
+
+  # MFA (--enforce-mfa, --disable-*). MFA methods are enabled by default and
+  # opted out via disable_*; enforce_mfa forces enrollment for all users.
+  enforce_mfa: true
+  disable_totp_login: false
+  disable_webauthn_mfa: false
+  disable_email_otp: false
+  disable_sms_otp: false
+  disable_mfa: false
+
   # FGA (OpenFGA) integration
   fga_store: null
   fga_store_url: null
@@ -295,6 +343,11 @@ authorizer:
   # OAuth response config
   default_authorize_response_type: null
   default_authorize_response_mode: null
+
+  # Enforce OAuth 2.1 restrictions (--oauth2-1-strict): reject the
+  # implicit/hybrid-with-token response types and PKCE plain (require S256).
+  # Breaking; opt-in.
+  oauth2_1_strict: false
 
   # Branding
   organization_name: null
