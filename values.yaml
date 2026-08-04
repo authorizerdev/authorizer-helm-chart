@@ -209,6 +209,21 @@ authorizer:
   # JWT secret (for HMAC-based JWT)
   jwt_secret: null
 
+  # Key used to encrypt secrets AT REST (TOTP seeds) and to HMAC the OTP
+  # digests used by email/SMS verification and password reset.
+  #
+  # Falls back to jwt_secret when unset, so HMAC (HS*) installs need not set
+  # it. RSA/ECDSA (RS*/ES*) installs have no jwt_secret to fall back to, and
+  # the server REFUSES TO START without this — an empty key would derive a
+  # publicly computable constant, leaving those secrets effectively
+  # unprotected.
+  #
+  # Set it explicitly even on HMAC installs: while this and jwt_secret are the
+  # same value, rotating jwt_secret silently locks out every enrolled TOTP
+  # user, because the at-rest key changes with it and there is no
+  # re-encryption path.
+  encryption_key: null
+
   # JWT private key (for RSA/EC-based JWT)
   jwt_private_key: null
 
@@ -313,7 +328,11 @@ authorizer:
 
   # MFA (--enforce-mfa, --disable-*). MFA methods are enabled by default and
   # opted out via disable_*; enforce_mfa forces enrollment for all users.
-  enforce_mfa: true
+  # Matches the server default since 2.4.0, which flipped this from true to
+  # false: MFA is offered and skippable rather than mandatory. The chart used
+  # to hardcode the old `true`, silently forcing every Helm deployment into
+  # mandatory enrollment with no way to decline.
+  enforce_mfa: false
   disable_totp_login: false
   disable_webauthn_mfa: false
   disable_email_otp: false

@@ -55,6 +55,7 @@ spec:
                 --redis-url="${REDIS_URL}" \
                 --jwt-type="${JWT_TYPE}" \
                 --jwt-secret="${JWT_SECRET}" \
+                --encryption-key="${ENCRYPTION_KEY}" \
                 --jwt-private-key="${JWT_PRIVATE_KEY}" \
                 --jwt-public-key="${JWT_PUBLIC_KEY}" \
                 --jwt-role-claim="${JWT_ROLE_CLAIM}" \
@@ -119,7 +120,7 @@ spec:
                 --enable-mobile-basic-authentication="${ENABLE_MOBILE_BASIC_AUTHENTICATION:-true}" \
                 --enable-phone-verification="${ENABLE_PHONE_VERIFICATION:-false}" \
                 --enable-magic-link-login="${ENABLE_MAGIC_LINK_LOGIN:-false}" \
-                --enforce-mfa="${ENFORCE_MFA:-true}" \
+                --enforce-mfa="${ENFORCE_MFA:-false}" \
                 --disable-totp-login="${DISABLE_TOTP_LOGIN:-false}" \
                 --disable-webauthn-mfa="${DISABLE_WEBAUTHN_MFA:-false}" \
                 --disable-email-otp="${DISABLE_EMAIL_OTP:-false}" \
@@ -259,6 +260,13 @@ spec:
                 name: jwt-secret
                 key: jwt_secret
           {{- end }}
+          {{- if .Values.authorizer.encryption_key }}
+          - name: "ENCRYPTION_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: encryption-key
+                key: encryption_key
+          {{- end }}
           {{- if .Values.authorizer.jwt_private_key }}
           - name: "JWT_PRIVATE_KEY"
             valueFrom:
@@ -343,7 +351,7 @@ spec:
           - name: "GRPC_PORT"
             value: {{ .Values.authorizer.grpc_port | default 9091 | toString | quote }}
           - name: "ENABLE_GRPC_REFLECTION"
-            value: {{ .Values.authorizer.enable_grpc_reflection | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_grpc_reflection true) | quote }}
           - name: "GRPC_INSECURE"
             value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
           {{- if .Values.authorizer.grpc_tls_cert }}
@@ -438,37 +446,37 @@ spec:
           # HTTP routes / cookies / auth feature toggles. See values.yaml
           # for the operational notes attached to each one.
           - name: "ENABLE_LOGIN_PAGE"
-            value: {{ .Values.authorizer.enable_login_page | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_login_page true) | quote }}
           - name: "ENABLE_ORG_DISCOVERY"
             value: {{ .Values.authorizer.enable_org_discovery | default false | toString | quote }}
           - name: "ENABLE_PLAYGROUND"
-            value: {{ .Values.authorizer.enable_playground | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_playground true) | quote }}
           - name: "ENABLE_GRAPHQL_INTROSPECTION"
-            value: {{ .Values.authorizer.enable_graphql_introspection | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_graphql_introspection true) | quote }}
           - name: "DISABLE_ADMIN_HEADER_AUTH"
-            value: {{ .Values.authorizer.disable_admin_header_auth | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.disable_admin_header_auth true) | quote }}
           - name: "APP_COOKIE_SECURE"
-            value: {{ .Values.authorizer.app_cookie_secure | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.app_cookie_secure true) | quote }}
           - name: "APP_COOKIE_SAME_SITE"
             value: {{ .Values.authorizer.app_cookie_same_site | default "none" | quote }}
           - name: "ADMIN_COOKIE_SECURE"
-            value: {{ .Values.authorizer.admin_cookie_secure | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.admin_cookie_secure true) | quote }}
           - name: "ENABLE_STRONG_PASSWORD"
-            value: {{ .Values.authorizer.enable_strong_password | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_strong_password true) | quote }}
           - name: "ENABLE_BASIC_AUTHENTICATION"
-            value: {{ .Values.authorizer.enable_basic_authentication | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_basic_authentication true) | quote }}
           - name: "ENABLE_EMAIL_VERIFICATION"
             value: {{ .Values.authorizer.enable_email_verification | default false | toString | quote }}
           - name: "ENABLE_MOBILE_BASIC_AUTHENTICATION"
-            value: {{ .Values.authorizer.enable_mobile_basic_authentication | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_mobile_basic_authentication true) | quote }}
           - name: "ENABLE_PHONE_VERIFICATION"
             value: {{ .Values.authorizer.enable_phone_verification | default false | toString | quote }}
           - name: "ENABLE_MAGIC_LINK_LOGIN"
             value: {{ .Values.authorizer.enable_magic_link_login | default false | toString | quote }}
           - name: "ENABLE_SIGNUP"
-            value: {{ .Values.authorizer.enable_signup | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_signup true) | quote }}
           - name: "ENFORCE_MFA"
-            value: {{ .Values.authorizer.enforce_mfa | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enforce_mfa false) | quote }}
           - name: "DISABLE_TOTP_LOGIN"
             value: {{ .Values.authorizer.disable_totp_login | default false | toString | quote }}
           - name: "DISABLE_WEBAUTHN_MFA"
