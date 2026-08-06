@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: quay.io/quay/busybox:latest
       command:
         - sh
         - -c
