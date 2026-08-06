@@ -27,5 +27,8 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add "charts/authorizer-${version}.tgz" index.yaml
-          git commit -m "chore: publish chart ${version} [skip ci]"
+          # No [skip ci]: Netlify honours it and would not deploy the new chart.
+          # Loop-safe anyway — GITHUB_TOKEN pushes do not trigger workflows, and
+          # the guard above makes a re-run a no-op.
+          git commit -m "chore: publish chart ${version}"
           git push
