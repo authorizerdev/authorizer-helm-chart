@@ -55,7 +55,9 @@ spec:
                 --redis-url="${REDIS_URL}" \
                 --jwt-type="${JWT_TYPE}" \
                 --jwt-secret="${JWT_SECRET}" \
+                {{- if .Values.authorizer.encryption_key }}
                 --encryption-key="${ENCRYPTION_KEY}" \
+                {{- end }}
                 --jwt-private-key="${JWT_PRIVATE_KEY}" \
                 --jwt-public-key="${JWT_PUBLIC_KEY}" \
                 --jwt-role-claim="${JWT_ROLE_CLAIM}" \
