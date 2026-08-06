@@ -1,0 +1,31 @@
+name: Publish chart
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Chart.yaml
+      - values.yaml
+      - templates/**
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - name: Package and index if this version is not published yet
+        run: |
+          set -eu
+          version=$(helm show chart . | awk '/^version:/ {print $2}')
+          if [ -f "charts/authorizer-${version}.tgz" ]; then
+            echo "authorizer-${version}.tgz already published"
+            exit 0
+          fi
+          make build
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "charts/authorizer-${version}.tgz" index.yaml
+          git commit -m "chore: publish chart ${version} [skip ci]"
+          git push
