@@ -316,7 +316,18 @@ When upgrading the chart, check the [CHANGELOG](https://github.com/authorizerdev
 
 ## Release Workflow
 
-Pushing a version tag (e.g. `v2.2.0`) to this repository triggers the CI workflow. The workflow packages the chart, updates the Helm repo index at `https://helm-charts.authorizer.dev`, and publishes the release. `appVersion` inside `Chart.yaml` is kept in sync with the Authorizer binary release by `release.sh` — do not edit it manually.
+Publishing is automatic. `.github/workflows/publish.yml` runs on every push to `main`
+that touches `Chart.yaml`, `values.yaml` or `templates/`. It packages the chart,
+regenerates `index.yaml`, and commits both back to `main`. Netlify serves the branch
+root at https://helm-charts.authorizer.dev, so the new version is live once that
+commit deploys.
+
+To cut a release, bump `version` in `Chart.yaml` (and `appVersion` when the binary
+changes) and merge to `main`. Nothing else. A version that is already packaged under
+`charts/` is skipped, so re-runs are no-ops.
+
+Do not put a CI-skip marker in a commit that touches `charts/` or `index.yaml` —
+Netlify honours those markers and the chart will land in git without ever being served.
 
 ## Local Testing with Kind
 
