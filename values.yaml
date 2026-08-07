@@ -342,6 +342,12 @@ authorizer:
   # FGA (OpenFGA) integration
   fga_store: null
   fga_store_url: null
+  # 2.4.0: a delegated (agent-acting-for-user) check against an authorization
+  # model with no `type agent` now DENIES instead of authorizing as the
+  # delegating user alone — that silently dropped the agent half of the
+  # permission intersection. Set true only while migrating a model; the server
+  # logs every use. Prefer adding `type agent` to the model.
+  fga_allow_unconstrained_agents: false
 
   # JWT additional config
   jwt_role_claim: null
@@ -396,7 +402,20 @@ authorizer:
   microsoft_client_id: null
   microsoft_client_secret: null
   microsoft_tenant_id: null
+  # Entra tenant IDs allowed to sign in when microsoft_tenant_id is a
+  # multi-tenant alias (common/organizations/consumers). Comma-separated.
+  # Empty allows any tenant, but an untrusted tenant's email will not link to
+  # an existing account — Entra's `email` is mutable and unattested there.
+  microsoft_allowed_tenants: null
   microsoft_scopes: null
+
+  # 2.4.0 nOAuth defense: a social login whose provider did not attest the
+  # email address no longer signs into an existing account. This is the
+  # compatibility escape hatch — it still cannot cross into an account another
+  # credential owns, but it leaves same-provider collisions open (two Entra
+  # tenants asserting one address). The server warns on every boot when set.
+  # Prefer pinning microsoft_tenant_id or enabling the xms_edov claim.
+  oauth_allow_unverified_provider_email: false
 
   apple_client_id: null
   apple_client_secret: null
