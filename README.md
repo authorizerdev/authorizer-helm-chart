@@ -6,7 +6,7 @@ Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hos
 
 This chart deploys the Authorizer binary as a Kubernetes `Deployment`, wires up a `Service` (HTTP + optional gRPC port), optional metrics infrastructure, and exposes all server flags as `values.yaml` keys.
 
-Chart version: **2.2.1** | App version: **2.3.0**
+Chart version: **2.3.0** | App version: **2.4.0-rc.18**
 
 ## Getting Started
 
@@ -186,6 +186,7 @@ The metrics port is never added to the main `Service` used for Ingress. Use `met
 | ---- | ----------- | -------- | ------- |
 | `authorizer.jwt_type` | JWT signing algorithm (e.g. `HS256`, `RS256`, `ES256`) | false | — |
 | `authorizer.jwt_secret` | Secret for HMAC-based JWT signing | false | — |
+| `authorizer.encryption_key` | Encrypts TOTP secrets and OTP digests at rest. **Required when `jwt_type` is `RS*`/`ES*`** — there is no `jwt_secret` to fall back to and the server refuses to start. Generate once with `openssl rand -hex 32` and keep it stable; changing it makes existing TOTP enrolments undecryptable | false | — |
 | `authorizer.jwt_private_key` | Private key for RSA/EC-based JWT signing | false | — |
 | `authorizer.jwt_public_key` | Public key for RSA/EC-based JWT verification | false | — |
 | `authorizer.jwt_role_claim` | Custom claim name for roles in the JWT | false | — |

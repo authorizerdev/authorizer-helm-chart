@@ -1,3 +1,18 @@
+{{/*
+2.4.0 makes `--enable-email-verification` with no working SMTP a FATAL boot
+error, not a warning: every recovery route terminates at the same mailbox, so
+without a mail path a user is created unverified and can never recover.
+
+Caught at render time rather than letting it through, because the failure mode
+in-cluster is a CrashLoopBackOff whose cause is one line in the container log.
+The condition mirrors the server's IsEmailServiceEnabled exactly — host set,
+port > 0, sender email set — so this never rejects a config the server accepts.
+*/}}
+{{- if .Values.authorizer.enable_email_verification }}
+  {{- if not (and .Values.authorizer.smtp_host (gt (int .Values.authorizer.smtp_port) 0) .Values.authorizer.smtp_sender_email) }}
+    {{- fail "authorizer.enable_email_verification is true but SMTP is incomplete. Authorizer 2.4.0 exits at boot in this configuration (users would be created unverified with no way to ever verify), so the pod would CrashLoopBackOff. Set authorizer.smtp_host, authorizer.smtp_port and authorizer.smtp_sender_email, or set enable_email_verification: false." }}
+  {{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,12 +64,16 @@ spec:
                 --database-cert-key="${DATABASE_CERT_KEY}" \
                 --fga-store="${FGA_STORE}" \
                 --fga-store-url="${FGA_STORE_URL}" \
+                --fga-allow-unconstrained-agents="${FGA_ALLOW_UNCONSTRAINED_AGENTS:-false}" \
                 --client-id="${CLIENT_ID}" \
                 --client-secret="${CLIENT_SECRET}" \
                 --admin-secret="${ADMIN_SECRET}" \
                 --redis-url="${REDIS_URL}" \
                 --jwt-type="${JWT_TYPE}" \
                 --jwt-secret="${JWT_SECRET}" \
+                {{- if .Values.authorizer.encryption_key }}
+                --encryption-key="${ENCRYPTION_KEY}" \
+                {{- end }}
                 --jwt-private-key="${JWT_PRIVATE_KEY}" \
                 --jwt-public-key="${JWT_PUBLIC_KEY}" \
                 --jwt-role-claim="${JWT_ROLE_CLAIM}" \
@@ -69,6 +88,7 @@ spec:
                 --allowed-origins="${ALLOWED_ORIGINS}" \
                 --default-authorize-response-type="${DEFAULT_AUTHORIZE_RESPONSE_TYPE}" \
                 --default-authorize-response-mode="${DEFAULT_AUTHORIZE_RESPONSE_MODE}" \
+                --oauth2-1-strict="${OAUTH2_1_STRICT:-false}" \
                 --organization-name="${ORGANIZATION_NAME}" \
                 --organization-logo="${ORGANIZATION_LOGO}" \
                 --smtp-host="${SMTP_HOST}" \
@@ -81,6 +101,7 @@ spec:
                 --smtp-skip-tls-verification="${SMTP_SKIP_TLS_VERIFICATION:-false}" \
                 --reset-password-url="${RESET_PASSWORD_URL}" \
                 --backchannel-logout-uri="${BACKCHANNEL_LOGOUT_URI}" \
+                --url="${AUTHORIZER_URL}" \
                 --env="${ENV}" \
                 --host="${HOST:-0.0.0.0}" \
                 --http-port="${PORT:-8080}" \
@@ -104,6 +125,7 @@ spec:
                 --graphql-max-body-bytes="${GRAPHQL_MAX_BODY_BYTES:-1048576}" \
                 --log-level="${LOG_LEVEL:-info}" \
                 --enable-login-page="${ENABLE_LOGIN_PAGE:-true}" \
+                --enable-org-discovery="${ENABLE_ORG_DISCOVERY:-false}" \
                 --enable-playground="${ENABLE_PLAYGROUND:-true}" \
                 --disable-admin-header-auth="${DISABLE_ADMIN_HEADER_AUTH:-true}" \
                 --enable-graphql-introspection="${ENABLE_GRAPHQL_INTROSPECTION:-true}" \
@@ -116,11 +138,12 @@ spec:
                 --enable-mobile-basic-authentication="${ENABLE_MOBILE_BASIC_AUTHENTICATION:-true}" \
                 --enable-phone-verification="${ENABLE_PHONE_VERIFICATION:-false}" \
                 --enable-magic-link-login="${ENABLE_MAGIC_LINK_LOGIN:-false}" \
-                --enable-totp-login="${ENABLE_TOTP_LOGIN:-false}" \
-                --enforce-mfa="${ENFORCE_MFA:-true}" \
-                --enable-mfa="${ENABLE_MFA:-false}" \
-                --enable-email-otp="${ENABLE_EMAIL_OTP:-false}" \
-                --enable-sms-otp="${ENABLE_SMS_OTP:-false}" \
+                --enforce-mfa="${ENFORCE_MFA:-false}" \
+                --disable-totp-login="${DISABLE_TOTP_LOGIN:-false}" \
+                --disable-webauthn-mfa="${DISABLE_WEBAUTHN_MFA:-false}" \
+                --disable-email-otp="${DISABLE_EMAIL_OTP:-false}" \
+                --disable-sms-otp="${DISABLE_SMS_OTP:-false}" \
+                --disable-mfa="${DISABLE_MFA:-false}" \
                 --enable-signup="${ENABLE_SIGNUP:-true}" \
                 --twilio-account-sid="${TWILIO_ACCOUNT_SID}" \
                 --twilio-api-key="${TWILIO_API_KEY}" \
@@ -144,7 +167,9 @@ spec:
                 --microsoft-client-id="${MICROSOFT_CLIENT_ID}" \
                 --microsoft-client-secret="${MICROSOFT_CLIENT_SECRET}" \
                 --microsoft-tenant-id="${MICROSOFT_TENANT_ID}" \
+                --microsoft-allowed-tenants="${MICROSOFT_ALLOWED_TENANTS}" \
                 --microsoft-scopes="${MICROSOFT_SCOPES}" \
+                --oauth-allow-unverified-provider-email="${OAUTH_ALLOW_UNVERIFIED_PROVIDER_EMAIL:-false}" \
                 --apple-client-id="${APPLE_CLIENT_ID}" \
                 --apple-client-secret="${APPLE_CLIENT_SECRET}" \
                 --apple-scopes="${APPLE_SCOPES}" \
@@ -255,6 +280,13 @@ spec:
                 name: jwt-secret
                 key: jwt_secret
           {{- end }}
+          {{- if .Values.authorizer.encryption_key }}
+          - name: "ENCRYPTION_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: encryption-key
+                key: encryption_key
+          {{- end }}
           {{- if .Values.authorizer.jwt_private_key }}
           - name: "JWT_PRIVATE_KEY"
             valueFrom:
@@ -304,7 +336,7 @@ spec:
             value: "{{ .Values.authorizer.couchbase_bucket }}"
           {{- end }}
           {{- if .Values.authorizer.couchbase_bucket_ram_quota }}
-          - name: "COUCHBASE_BUCKET_RAM_QUOTA"
+          - name: "COUCHBASE_RAM_QUOTA"
             value: "{{ .Values.authorizer.couchbase_bucket_ram_quota }}"
           {{- end }}
           {{- if .Values.authorizer.couchbase_scope }}
@@ -315,12 +347,20 @@ spec:
           - name: "AUTHORIZER_URL"
             value: "{{ .Values.authorizer.authorizer_url }}"
           {{- end }}
+          - name: "HOST"
+            value: {{ .Values.authorizer.host | default "0.0.0.0" | quote }}
           - name: "PORT"
             value: "{{ .Values.authorizer.http_port | default 8080 }}"
           - name: "METRICS_PORT"
             value: "{{ .Values.authorizer.metrics_port | default 8081 }}"
           - name: "METRICS_HOST"
             value: {{ .Values.authorizer.metrics_host | default "0.0.0.0" | quote }}
+          - name: "LOG_LEVEL"
+            value: {{ .Values.authorizer.log_level | default "info" | quote }}
+          {{- if .Values.authorizer.env }}
+          - name: "ENV"
+            value: {{ .Values.authorizer.env | quote }}
+          {{- end }}
           - name: "RATE_LIMIT_RPS"
             value: {{ .Values.authorizer.rate_limit_rps | default 30 | toString | quote }}
           - name: "RATE_LIMIT_BURST"
@@ -331,7 +371,7 @@ spec:
           - name: "GRPC_PORT"
             value: {{ .Values.authorizer.grpc_port | default 9091 | toString | quote }}
           - name: "ENABLE_GRPC_REFLECTION"
-            value: {{ .Values.authorizer.enable_grpc_reflection | default true | toString | quote }}
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_grpc_reflection true) | quote }}
           - name: "GRPC_INSECURE"
             value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
           {{- if .Values.authorizer.grpc_tls_cert }}
@@ -420,6 +460,53 @@ spec:
             value: {{ .Values.authorizer.graphql_max_aliases | default 30 | toString | quote }}
           - name: "GRAPHQL_MAX_BODY_BYTES"
             value: {{ int64 (default 1048576 .Values.authorizer.graphql_max_body_bytes) | toString | quote }}
+          - name: "OAUTH2_1_STRICT"
+            value: {{ .Values.authorizer.oauth2_1_strict | default false | toString | quote }}
+
+          # HTTP routes / cookies / auth feature toggles. See values.yaml
+          # for the operational notes attached to each one.
+          - name: "ENABLE_LOGIN_PAGE"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_login_page true) | quote }}
+          - name: "ENABLE_ORG_DISCOVERY"
+            value: {{ .Values.authorizer.enable_org_discovery | default false | toString | quote }}
+          - name: "ENABLE_PLAYGROUND"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_playground true) | quote }}
+          - name: "ENABLE_GRAPHQL_INTROSPECTION"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_graphql_introspection true) | quote }}
+          - name: "DISABLE_ADMIN_HEADER_AUTH"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.disable_admin_header_auth true) | quote }}
+          - name: "APP_COOKIE_SECURE"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.app_cookie_secure true) | quote }}
+          - name: "APP_COOKIE_SAME_SITE"
+            value: {{ .Values.authorizer.app_cookie_same_site | default "none" | quote }}
+          - name: "ADMIN_COOKIE_SECURE"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.admin_cookie_secure true) | quote }}
+          - name: "ENABLE_STRONG_PASSWORD"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_strong_password true) | quote }}
+          - name: "ENABLE_BASIC_AUTHENTICATION"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_basic_authentication true) | quote }}
+          - name: "ENABLE_EMAIL_VERIFICATION"
+            value: {{ .Values.authorizer.enable_email_verification | default false | toString | quote }}
+          - name: "ENABLE_MOBILE_BASIC_AUTHENTICATION"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_mobile_basic_authentication true) | quote }}
+          - name: "ENABLE_PHONE_VERIFICATION"
+            value: {{ .Values.authorizer.enable_phone_verification | default false | toString | quote }}
+          - name: "ENABLE_MAGIC_LINK_LOGIN"
+            value: {{ .Values.authorizer.enable_magic_link_login | default false | toString | quote }}
+          - name: "ENABLE_SIGNUP"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_signup true) | quote }}
+          - name: "ENFORCE_MFA"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enforce_mfa false) | quote }}
+          - name: "DISABLE_TOTP_LOGIN"
+            value: {{ .Values.authorizer.disable_totp_login | default false | toString | quote }}
+          - name: "DISABLE_WEBAUTHN_MFA"
+            value: {{ .Values.authorizer.disable_webauthn_mfa | default false | toString | quote }}
+          - name: "DISABLE_EMAIL_OTP"
+            value: {{ .Values.authorizer.disable_email_otp | default false | toString | quote }}
+          - name: "DISABLE_SMS_OTP"
+            value: {{ .Values.authorizer.disable_sms_otp | default false | toString | quote }}
+          - name: "DISABLE_MFA"
+            value: {{ .Values.authorizer.disable_mfa | default false | toString | quote }}
 
           # FGA (OpenFGA) integration
           {{- if .Values.authorizer.fga_store }}
@@ -436,6 +523,11 @@ spec:
                 name: fga-store-url
                 key: fga_store_url
           {{- end }}
+          # 2.4.0: a delegated (agent-acting-for-user) FGA check against a model
+          # with no `type agent` now DENIES rather than silently authorizing as
+          # the user alone. Set true only while migrating a model.
+          - name: "FGA_ALLOW_UNCONSTRAINED_AGENTS"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.fga_allow_unconstrained_agents false) | quote }}
 
           # JWT additional config
           {{- if .Values.authorizer.jwt_role_claim }}
@@ -605,10 +697,19 @@ spec:
           - name: "MICROSOFT_TENANT_ID"
             value: "{{ .Values.authorizer.microsoft_tenant_id }}"
           {{- end }}
+          {{- if .Values.authorizer.microsoft_allowed_tenants }}
+          - name: "MICROSOFT_ALLOWED_TENANTS"
+            value: "{{ .Values.authorizer.microsoft_allowed_tenants }}"
+          {{- end }}
           {{- if .Values.authorizer.microsoft_scopes }}
           - name: "MICROSOFT_SCOPES"
             value: "{{ .Values.authorizer.microsoft_scopes }}"
           {{- end }}
+          # 2.4.0 nOAuth defense: a social login whose provider did not attest
+          # the email no longer links to an existing account. This is the
+          # compatibility escape hatch; the server warns on every boot when set.
+          - name: "OAUTH_ALLOW_UNVERIFIED_PROVIDER_EMAIL"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.oauth_allow_unverified_provider_email false) | quote }}
           {{- if .Values.authorizer.apple_client_id }}
           - name: "APPLE_CLIENT_ID"
             valueFrom:
