@@ -6,7 +6,7 @@ Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hos
 
 This chart deploys the Authorizer binary as a Kubernetes `Deployment`, wires up a `Service` (HTTP + optional gRPC port), optional metrics infrastructure, and exposes all server flags as `values.yaml` keys.
 
-Chart version: **2.2.0** | App version: **2.3.0**
+Chart version: **2.3.0** | App version: **2.4.0-rc.18**
 
 ## Getting Started
 
@@ -186,6 +186,7 @@ The metrics port is never added to the main `Service` used for Ingress. Use `met
 | ---- | ----------- | -------- | ------- |
 | `authorizer.jwt_type` | JWT signing algorithm (e.g. `HS256`, `RS256`, `ES256`) | false | — |
 | `authorizer.jwt_secret` | Secret for HMAC-based JWT signing | false | — |
+| `authorizer.encryption_key` | Encrypts TOTP secrets and OTP digests at rest. **Required when `jwt_type` is `RS*`/`ES*`** — there is no `jwt_secret` to fall back to and the server refuses to start. Generate once with `openssl rand -hex 32` and keep it stable; changing it makes existing TOTP enrolments undecryptable | false | — |
 | `authorizer.jwt_private_key` | Private key for RSA/EC-based JWT signing | false | — |
 | `authorizer.jwt_public_key` | Public key for RSA/EC-based JWT verification | false | — |
 | `authorizer.jwt_role_claim` | Custom claim name for roles in the JWT | false | — |
@@ -316,7 +317,18 @@ When upgrading the chart, check the [CHANGELOG](https://github.com/authorizerdev
 
 ## Release Workflow
 
-Pushing a version tag (e.g. `v2.2.0`) to this repository triggers the CI workflow. The workflow packages the chart, updates the Helm repo index at `https://helm-charts.authorizer.dev`, and publishes the release. `appVersion` inside `Chart.yaml` is kept in sync with the Authorizer binary release by `release.sh` — do not edit it manually.
+Publishing is automatic. `.github/workflows/publish.yml` runs on every push to `main`
+that touches `Chart.yaml`, `values.yaml` or `templates/`. It packages the chart,
+regenerates `index.yaml`, and commits both back to `main`. Netlify serves the branch
+root at https://helm-charts.authorizer.dev, so the new version is live once that
+commit deploys.
+
+To cut a release, bump `version` in `Chart.yaml` (and `appVersion` when the binary
+changes) and merge to `main`. Nothing else. A version that is already packaged under
+`charts/` is skipped, so re-runs are no-ops.
+
+Do not put a CI-skip marker in a commit that touches `charts/` or `index.yaml` —
+Netlify honours those markers and the chart will land in git without ever being served.
 
 ## Local Testing with Kind
 
