@@ -181,6 +181,16 @@ authorizer:
   # URL for authorizer deployment
   authorizer_url: null
 
+  # Serve the MCP tool surface over HTTP at POST <authorizer_url>/mcp, as an
+  # OAuth 2.1 resource server (RFC 9728 discovery, RFC 8707 audience-bound
+  # tokens). Off by default: it is a new internet-facing authenticated surface.
+  #
+  # REQUIRES authorizer_url. The chart fails at render time without it, because
+  # the server exits at boot — the audience every MCP token is checked against
+  # is derived from that URL, and deriving it from request headers instead would
+  # let a caller choose their own audience.
+  mcp_enabled: false
+
   # Couchbase bucket. In case of couchbase database_type
   couchbase_bucket: null
 
