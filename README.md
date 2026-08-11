@@ -56,6 +56,8 @@ The chart exposes three ports:
 | `9091` | gRPC | Same API over gRPC | Yes — opt-out via `service.grpc.enabled: false` |
 | `8081` | HTTP | Prometheus `/metrics` endpoint | No — opt-in via `metrics.service.enabled: true` |
 
+The MCP surface is served on the **main HTTP port**, not a port of its own: it must be publicly reachable on the same origin as the OAuth metadata clients discover it through, so it inherits the existing Ingress, CORS, security headers and rate limiting. Enable it with `authorizer.mcp_enabled: true` (requires `authorizer.authorizer_url`).
+
 The metrics port is never added to the main `Service` used for Ingress. Use `metrics.service.enabled: true` to create a dedicated internal `ClusterIP` service for in-cluster scraping, or `metrics.serviceMonitor.enabled: true` for Prometheus Operator integration.
 
 ## Values Reference
@@ -113,6 +115,7 @@ The metrics port is never added to the main `Service` used for Ingress. Use `met
 | `authorizer.metrics_port` | Dedicated Prometheus `/metrics` listen port (`--metrics-port`) | false | `8081` |
 | `authorizer.metrics_host` | Bind address for `/metrics` (`--metrics-host`). Use `0.0.0.0` for in-cluster scraping | false | `0.0.0.0` |
 | `authorizer.authorizer_url` | Public URL of this Authorizer deployment | false | — |
+| `authorizer.mcp_enabled` | Serve the MCP tool surface at `POST <authorizer_url>/mcp` as an OAuth 2.1 resource server. **Requires `authorizer.authorizer_url`** — the chart fails at render time without it, because the server exits at boot | false | `false` |
 | `authorizer.reset_password_url` | Custom URL for password reset emails | false | — |
 | `authorizer.backchannel_logout_uri` | Back-channel logout URI | false | — |
 | `authorizer.custom_access_token_script` | JavaScript snippet (URL-encoded) injected at token issuance | false | — |

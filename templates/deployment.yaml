@@ -13,6 +13,24 @@ port > 0, sender email set — so this never rejects a config the server accepts
     {{- fail "authorizer.enable_email_verification is true but SMTP is incomplete. Authorizer 2.4.0 exits at boot in this configuration (users would be created unverified with no way to ever verify), so the pod would CrashLoopBackOff. Set authorizer.smtp_host, authorizer.smtp_port and authorizer.smtp_sender_email, or set enable_email_verification: false." }}
   {{- end }}
 {{- end }}
+{{/*
+--mcp-enabled requires --url, and the server EXITS at boot without it rather
+than starting in a degraded mode.
+
+The reason is not cosmetic: every token presented at /mcp is checked against
+this deployment's canonical resource identifier, <url>/mcp. With no --url that
+identifier would be derived from request headers (X-Authorizer-URL,
+X-Forwarded-Host, Host), which lets a caller name the audience their own token
+must match — no check at all. So the server refuses the combination.
+
+Caught at render time for the same reason as the SMTP check above: in-cluster
+the failure is a CrashLoopBackOff whose cause is one line in the container log.
+*/}}
+{{- if .Values.authorizer.mcp_enabled }}
+  {{- if not .Values.authorizer.authorizer_url }}
+    {{- fail "authorizer.mcp_enabled is true but authorizer.authorizer_url is not set. The MCP surface binds access tokens to <authorizer_url>/mcp, and deriving that identifier from request headers instead would let a caller choose their own token audience — so the server exits at boot in this configuration and the pod would CrashLoopBackOff. Set authorizer.authorizer_url (e.g. https://auth.example.com), or set mcp_enabled: false." }}
+  {{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -112,6 +130,7 @@ spec:
                 --grpc-insecure="${GRPC_INSECURE:-false}" \
                 --grpc-tls-cert="${GRPC_TLS_CERT}" \
                 --grpc-tls-key="${GRPC_TLS_KEY}" \
+                --mcp-enabled="${MCP_ENABLED:-false}" \
                 --rate-limit-rps="${RATE_LIMIT_RPS}" \
                 --rate-limit-burst="${RATE_LIMIT_BURST}" \
                 --rate-limit-fail-closed="${RATE_LIMIT_FAIL_CLOSED}" \
@@ -372,6 +391,12 @@ spec:
             value: {{ .Values.authorizer.grpc_port | default 9091 | toString | quote }}
           - name: "ENABLE_GRPC_REFLECTION"
             value: {{ include "authorizer.bool" (list .Values.authorizer.enable_grpc_reflection true) | quote }}
+          # MCP tool surface, served at POST <url>/mcp on the main HTTP listener
+          # (not its own port — it must be publicly reachable on the same origin
+          # as the OAuth metadata clients discover it through). Requires
+          # authorizer_url; guarded at render time above.
+          - name: "MCP_ENABLED"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.mcp_enabled false) | quote }}
           - name: "GRPC_INSECURE"
             value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
           {{- if .Values.authorizer.grpc_tls_cert }}
