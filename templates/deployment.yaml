@@ -130,7 +130,7 @@ spec:
                 --grpc-insecure="${GRPC_INSECURE:-false}" \
                 --grpc-tls-cert="${GRPC_TLS_CERT}" \
                 --grpc-tls-key="${GRPC_TLS_KEY}" \
-                --mcp-enabled="${MCP_ENABLED:-false}" \
+                ${MCP_ENABLED:+--mcp-enabled="$MCP_ENABLED"} \
                 --rate-limit-rps="${RATE_LIMIT_RPS}" \
                 --rate-limit-burst="${RATE_LIMIT_BURST}" \
                 --rate-limit-fail-closed="${RATE_LIMIT_FAIL_CLOSED}" \
@@ -395,8 +395,13 @@ spec:
           # (not its own port — it must be publicly reachable on the same origin
           # as the OAuth metadata clients discover it through). Requires
           # authorizer_url; guarded at render time above.
+          {{- if .Values.authorizer.mcp_enabled }}
+          # Set ONLY when enabled. An empty value would still expand to the flag
+          # on image tags that predate it, which is a boot failure rather than a
+          # no-op — see the entrypoint's ${MCP_ENABLED:+...} guard.
           - name: "MCP_ENABLED"
-            value: {{ include "authorizer.bool" (list .Values.authorizer.mcp_enabled false) | quote }}
+            value: "true"
+          {{- end }}
           - name: "GRPC_INSECURE"
             value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
           {{- if .Values.authorizer.grpc_tls_cert }}
