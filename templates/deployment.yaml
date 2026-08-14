@@ -14,22 +14,22 @@ port > 0, sender email set — so this never rejects a config the server accepts
   {{- end }}
 {{- end }}
 {{/*
---mcp-enabled requires --url, and the server EXITS at boot without it rather
-than starting in a degraded mode.
+--url is REQUIRED as of Authorizer 2.4.0 — unconditionally, not just with
+--mcp-enabled. The server EXITS at boot without it rather than starting in a
+degraded mode.
 
-The reason is not cosmetic: every token presented at /mcp is checked against
-this deployment's canonical resource identifier, <url>/mcp. With no --url that
-identifier would be derived from request headers (X-Authorizer-URL,
-X-Forwarded-Host, Host), which lets a caller name the audience their own token
-must match — no check at all. So the server refuses the combination.
+Without it the server derives its own host from request headers
+(X-Authorizer-URL, X-Forwarded-Host, Host), so a forged header makes a genuine
+password-reset or verification email carry a link to an attacker-controlled
+domain (CWE-640). With --mcp-enabled it is worse still: every token presented
+at /mcp is checked against <url>/mcp, so a header-derived identifier would let
+a caller name the audience their own token must match — no check at all.
 
 Caught at render time for the same reason as the SMTP check above: in-cluster
 the failure is a CrashLoopBackOff whose cause is one line in the container log.
 */}}
-{{- if .Values.authorizer.mcp_enabled }}
-  {{- if not .Values.authorizer.authorizer_url }}
-    {{- fail "authorizer.mcp_enabled is true but authorizer.authorizer_url is not set. The MCP surface binds access tokens to <authorizer_url>/mcp, and deriving that identifier from request headers instead would let a caller choose their own token audience — so the server exits at boot in this configuration and the pod would CrashLoopBackOff. Set authorizer.authorizer_url (e.g. https://auth.example.com), or set mcp_enabled: false." }}
-  {{- end }}
+{{- if not .Values.authorizer.authorizer_url }}
+  {{- fail "authorizer.authorizer_url is required as of Authorizer 2.4.0 — the server exits at boot without it and the pod would CrashLoopBackOff. Set authorizer.authorizer_url to this deployment's own public base URL, including the scheme (e.g. https://auth.example.com); a bare hostname is rejected. Note this is NOT authorizer.allowed_origins: authorizer_url is where Authorizer itself is reachable, allowed_origins is the list of apps it may redirect to." }}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment

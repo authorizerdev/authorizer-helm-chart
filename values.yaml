@@ -178,7 +178,15 @@ authorizer:
   # AWS secret access key. In case of dynamodb database_type
   aws_secret_access_key: null
 
-  # URL for authorizer deployment
+  # REQUIRED as of Authorizer 2.4.0 — this deployment's own public base URL,
+  # including the scheme (e.g. https://auth.example.com). The chart fails at
+  # render time without it, because the server exits at boot: it is the only
+  # source used to build verification/reset/magic-link URLs, the JWT iss claim
+  # and OIDC discovery URLs, and deriving those from request headers instead
+  # exposes host-header-injection account takeover (CWE-640).
+  #
+  # This is NOT allowed_origins: authorizer_url is where Authorizer itself is
+  # reachable; allowed_origins is the list of apps it may redirect to.
   authorizer_url: null
 
   # Serve the MCP tool surface over HTTP at POST <authorizer_url>/mcp, as an
