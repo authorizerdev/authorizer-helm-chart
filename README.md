@@ -318,7 +318,7 @@ extraEnv:
 
 **Chart version** (`version` in `Chart.yaml`) is incremented for any template, values, or packaging change. **App version** (`appVersion`) tracks the Authorizer binary release and is updated automatically by `release.sh` on each release.
 
-When upgrading the chart, check the [CHANGELOG](https://github.com/authorizerdev/authorizer-helm-chart/releases) and [MIGRATION.md](https://github.com/authorizerdev/authorizer/blob/main/MIGRATION.md) for breaking changes introduced by the app version bump.
+When upgrading the chart, check the [CHANGELOG](CHANGELOG.md) and [MIGRATION.md](https://github.com/authorizerdev/authorizer/blob/main/MIGRATION.md) for breaking changes introduced by the app version bump.
 
 ## Release Workflow
 
