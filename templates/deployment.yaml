@@ -104,6 +104,7 @@ spec:
                 --default-roles="${DEFAULT_ROLES}" \
                 --protected-roles="${PROTECTED_ROLES}" \
                 --allowed-origins="${ALLOWED_ORIGINS}" \
+                --redirect-uris="${REDIRECT_URIS}" \
                 --default-authorize-response-type="${DEFAULT_AUTHORIZE_RESPONSE_TYPE}" \
                 --default-authorize-response-mode="${DEFAULT_AUTHORIZE_RESPONSE_MODE}" \
                 --oauth2-1-strict="${OAUTH2_1_STRICT:-false}" \
@@ -408,6 +409,10 @@ spec:
           # OAuth client self-registration for MCP clients. Both are off by
           # default: CIMD changes the authorization endpoint's trust model for
           # every client, and DCR is an unauthenticated write endpoint.
+          # Exact redirect_uri matching for this deployment's own client. Empty
+          # keeps the --allowed-origins fallback, which compares origins.
+          - name: "REDIRECT_URIS"
+            value: {{ .Values.authorizer.redirect_uris | default "" | quote }}
           - name: "ENABLE_CLIENT_ID_METADATA_DOCUMENT"
             value: {{ include "authorizer.bool" (list .Values.authorizer.enable_client_id_metadata_document false) | quote }}
           - name: "CLIENT_ID_METADATA_ALLOWED_DOMAINS"
