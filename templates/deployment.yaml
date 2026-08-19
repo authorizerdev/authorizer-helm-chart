@@ -104,7 +104,11 @@ spec:
                 --default-roles="${DEFAULT_ROLES}" \
                 --protected-roles="${PROTECTED_ROLES}" \
                 --allowed-origins="${ALLOWED_ORIGINS}" \
-                --redirect-uris="${REDIRECT_URIS}" \
+                # Guarded like MCP_ENABLED above: an empty value would still expand
+                # to the flag on image tags that predate it, and an unknown flag is a
+                # hard boot failure rather than a no-op. image.tag is user-overridable,
+                # so an older tag is a supported configuration.
+                ${REDIRECT_URIS:+--redirect-uris="$REDIRECT_URIS"} \
                 --default-authorize-response-type="${DEFAULT_AUTHORIZE_RESPONSE_TYPE}" \
                 --default-authorize-response-mode="${DEFAULT_AUTHORIZE_RESPONSE_MODE}" \
                 --oauth2-1-strict="${OAUTH2_1_STRICT:-false}" \
@@ -411,8 +415,10 @@ spec:
           # every client, and DCR is an unauthenticated write endpoint.
           # Exact redirect_uri matching for this deployment's own client. Empty
           # keeps the --allowed-origins fallback, which compares origins.
+          {{- if .Values.authorizer.redirect_uris }}
           - name: "REDIRECT_URIS"
-            value: {{ .Values.authorizer.redirect_uris | default "" | quote }}
+            value: {{ .Values.authorizer.redirect_uris | quote }}
+          {{- end }}
           - name: "ENABLE_CLIENT_ID_METADATA_DOCUMENT"
             value: {{ include "authorizer.bool" (list .Values.authorizer.enable_client_id_metadata_document false) | quote }}
           - name: "CLIENT_ID_METADATA_ALLOWED_DOMAINS"

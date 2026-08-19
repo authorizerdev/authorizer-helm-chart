@@ -6,7 +6,7 @@ Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hos
 
 This chart deploys the Authorizer binary as a Kubernetes `Deployment`, wires up a `Service` (HTTP + optional gRPC port), optional metrics infrastructure, and exposes all server flags as `values.yaml` keys.
 
-Chart version: **2.4.1** | App version: **2.4.0**
+Chart version: **2.4.2** | App version: **2.4.0**
 
 ## Getting Started
 
