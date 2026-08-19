@@ -131,6 +131,9 @@ spec:
                 --grpc-tls-cert="${GRPC_TLS_CERT}" \
                 --grpc-tls-key="${GRPC_TLS_KEY}" \
                 ${MCP_ENABLED:+--mcp-enabled="$MCP_ENABLED"} \
+                --enable-client-id-metadata-document="${ENABLE_CLIENT_ID_METADATA_DOCUMENT:-false}" \
+                --client-id-metadata-allowed-domains="${CLIENT_ID_METADATA_ALLOWED_DOMAINS}" \
+                --enable-dynamic-client-registration="${ENABLE_DYNAMIC_CLIENT_REGISTRATION:-false}" \
                 --rate-limit-rps="${RATE_LIMIT_RPS}" \
                 --rate-limit-burst="${RATE_LIMIT_BURST}" \
                 --rate-limit-fail-closed="${RATE_LIMIT_FAIL_CLOSED}" \
@@ -402,6 +405,15 @@ spec:
           - name: "MCP_ENABLED"
             value: "true"
           {{- end }}
+          # OAuth client self-registration for MCP clients. Both are off by
+          # default: CIMD changes the authorization endpoint's trust model for
+          # every client, and DCR is an unauthenticated write endpoint.
+          - name: "ENABLE_CLIENT_ID_METADATA_DOCUMENT"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_client_id_metadata_document false) | quote }}
+          - name: "CLIENT_ID_METADATA_ALLOWED_DOMAINS"
+            value: {{ .Values.authorizer.client_id_metadata_allowed_domains | default "" | quote }}
+          - name: "ENABLE_DYNAMIC_CLIENT_REGISTRATION"
+            value: {{ include "authorizer.bool" (list .Values.authorizer.enable_dynamic_client_registration false) | quote }}
           - name: "GRPC_INSECURE"
             value: {{ .Values.authorizer.grpc_insecure | default false | toString | quote }}
           {{- if .Values.authorizer.grpc_tls_cert }}

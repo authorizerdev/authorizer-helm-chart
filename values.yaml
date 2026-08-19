@@ -199,6 +199,20 @@ authorizer:
   # let a caller choose their own audience.
   mcp_enabled: false
 
+  # Accept an HTTPS-URL client_id that resolves to a Client ID Metadata
+  # Document (CIMD), so an MCP client with no pre-registration can
+  # authenticate. Off by default: it changes the authorization endpoint's
+  # trust model for every client, not just MCP ones.
+  enable_client_id_metadata_document: false
+
+  # Comma-separated host allow-list for CIMD documents. Empty means any host.
+  client_id_metadata_allowed_domains: null
+
+  # RFC 7591 dynamic client registration at POST /oauth/register, for MCP
+  # clients that cannot use CIMD yet. Off by default: it is an
+  # unauthenticated write endpoint.
+  enable_dynamic_client_registration: false
+
   # Couchbase bucket. In case of couchbase database_type
   couchbase_bucket: null
 
