@@ -35,6 +35,7 @@ helm install \
     --create-namespace \
     --set authorizer.database_type=sqlite \
     --set authorizer.database_url="/tmp/authorizer.db" \
+    --set authorizer.authorizer_url=https://auth.example.com \
     --set authorizer.client_id=YOUR_CLIENT_ID \
     --set authorizer.client_secret=YOUR_CLIENT_SECRET \
     --set authorizer.admin_secret=YOUR_ADMIN_SECRET \
@@ -44,7 +45,7 @@ helm install \
     authorizer authorizer/authorizer
 ```
 
-> **Note:** In v2, `client_id`, `client_secret`, and `admin_secret` are **required**. The binary refuses to start when `admin_secret` is empty. All configuration is passed via CLI args at startup. See [MIGRATION.md](https://github.com/authorizerdev/authorizer/blob/main/MIGRATION.md) for upgrade details.
+> **Note:** In v2, `authorizer_url`, `client_id`, `client_secret`, and `admin_secret` are **required**. The chart refuses to render without `authorizer_url`, because the server exits at boot without it — it is where Authorizer itself is reachable, which is not the same thing as `allowed_origins`. The binary refuses to start when `admin_secret` is empty. All configuration is passed via CLI args at startup. See [MIGRATION.md](https://github.com/authorizerdev/authorizer/blob/main/MIGRATION.md) for upgrade details.
 
 ## Port Exposure
 
@@ -114,7 +115,7 @@ The metrics port is never added to the main `Service` used for Ingress. Use `met
 | `authorizer.http_port` | Main HTTP listen port (`--http-port`). Must differ from `metrics_port` | false | `8080` |
 | `authorizer.metrics_port` | Dedicated Prometheus `/metrics` listen port (`--metrics-port`) | false | `8081` |
 | `authorizer.metrics_host` | Bind address for `/metrics` (`--metrics-host`). Use `0.0.0.0` for in-cluster scraping | false | `0.0.0.0` |
-| `authorizer.authorizer_url` | Public URL of this Authorizer deployment | false | — |
+| `authorizer.authorizer_url` | Public base URL of this deployment, with the scheme (`--url`). **Required as of 2.4.0** — the chart fails at render time without it, because the server exits at boot. Not the same as `allowed_origins`: this is where Authorizer itself is reachable, `allowed_origins` lists the apps it may redirect to | **true** | — |
 | `authorizer.mcp_enabled` | Serve the MCP tool surface at `POST <authorizer_url>/mcp` as an OAuth 2.1 resource server. **Requires `authorizer.authorizer_url`** — the chart fails at render time without it, because the server exits at boot | false | `false` |
 | `authorizer.reset_password_url` | Custom URL for password reset emails | false | — |
 | `authorizer.backchannel_logout_uri` | Back-channel logout URI | false | — |
@@ -291,6 +292,7 @@ Each provider follows the pattern `authorizer.<provider>_client_id`, `authorizer
 | `authorizer.default_roles` | Comma-separated list of roles assigned to new users | false | — |
 | `authorizer.protected_roles` | Comma-separated list of roles that cannot be self-assigned | false | — |
 | `authorizer.allowed_origins` | Comma-separated list of allowed CORS origins | false | — |
+| `authorizer.redirect_uris` | Comma-separated list of **exact** redirect URIs for this deployment's own client (`--redirect-uris`, new in 2.4.0). Unset falls back to matching `allowed_origins`, which compares *origins* — any path under an allowed host is accepted. Applies to every flow carrying this `client_id`, so list every callback your apps use | false | — |
 | `authorizer.organization_name` | Organization name shown in the dashboard and emails | false | — |
 | `authorizer.organization_logo` | URL of organization logo shown in the dashboard | false | — |
 
