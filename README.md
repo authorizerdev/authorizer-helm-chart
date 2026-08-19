@@ -1,4 +1,4 @@
-[![Tests](https://github.com/authorizerdev/authorizer-helm-chart/actions/workflows/test.yml/badge.svg)](https://github.com/authorizerdev/authorizer-helm-chart/actions/workflows/test.yml)
+[![Publish chart](https://github.com/authorizerdev/authorizer-helm-chart/actions/workflows/publish.yml/badge.svg)](https://github.com/authorizerdev/authorizer-helm-chart/actions/workflows/publish.yml)
 
 # authorizer-helm-chart
 
@@ -6,7 +6,7 @@ Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hos
 
 This chart deploys the Authorizer binary as a Kubernetes `Deployment`, wires up a `Service` (HTTP + optional gRPC port), optional metrics infrastructure, and exposes all server flags as `values.yaml` keys.
 
-Chart version: **2.4.3** | App version: **2.4.0**
+App version: **2.4.0**. The chart version is in `Chart.yaml`; `helm search repo authorizer/authorizer --versions` lists what is published.
 
 ## Getting Started
 
@@ -323,8 +323,10 @@ When upgrading the chart, check the [CHANGELOG](https://github.com/authorizerdev
 ## Release Workflow
 
 Publishing is automatic. `.github/workflows/publish.yml` runs on every push to `main`
-that touches `Chart.yaml`, `values.yaml` or `templates/`. It packages the chart,
-regenerates `index.yaml`, and commits both back to `main`. Netlify serves the branch
+that touches `Chart.yaml`, `values.yaml` or `templates/`. It first runs `test.yml`
+as a called job — a kind cluster install that waits for the pod to become ready —
+and only then packages the chart, regenerates `index.yaml`, and commits both back
+to `main`. A chart that does not boot cannot reach `index.yaml`. Netlify serves the branch
 root at https://helm-charts.authorizer.dev, so the new version is live once that
 commit deploys.
 
@@ -360,6 +362,7 @@ helm install \
     --create-namespace \
     --set authorizer.database_type=sqlite \
     --set authorizer.database_url="/tmp/authorizer.db" \
+    --set authorizer.authorizer_url=http://authorizer.authorizer.svc.cluster.local \
     --set authorizer.client_id=test-client-id \
     --set authorizer.client_secret=test-client-secret \
     --set authorizer.admin_secret=test-admin-secret \
