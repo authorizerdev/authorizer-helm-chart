@@ -203,12 +203,6 @@ authorizer:
   # Document (CIMD), so an MCP client with no pre-registration can
   # authenticate. Off by default: it changes the authorization endpoint's
   # trust model for every client, not just MCP ones.
-  # Comma-separated list of EXACT redirect URIs for this deployment's own
-  # client. When set, redirect_uri is matched exactly against this list per
-  # OIDC Core 3.1.2.1; when null, it falls back to allowed_origins, which
-  # compares origins and so accepts any path under an allowed host.
-  redirect_uris: null
-
   enable_client_id_metadata_document: false
 
   # Comma-separated host allow-list for CIMD documents. Empty means any host.
@@ -402,6 +396,15 @@ authorizer:
   default_roles: null
   protected_roles: null
   allowed_origins: null
+
+  # Comma-separated list of EXACT redirect URIs for this deployment's own
+  # client (client_id). When set, redirect_uri is matched exactly against this
+  # list, per OIDC Core 3.1.2.1. When null it falls back to allowed_origins,
+  # which compares ORIGINS — any path under an allowed host is accepted.
+  #
+  # Applies to every flow carrying this client_id, so list every callback your
+  # apps use or those logins are refused with invalid redirect_uri.
+  redirect_uris: null
 
   # OAuth response config
   default_authorize_response_type: null
