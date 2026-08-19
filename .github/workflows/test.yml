@@ -1,8 +1,9 @@
 name: Tests
+# Called by publish.yml before it packages, so a chart whose pod never
+# becomes ready cannot reach index.yaml (chart 2.4.2 did).
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+  workflow_call:
 jobs:
   job1:
     runs-on: ubuntu-latest
