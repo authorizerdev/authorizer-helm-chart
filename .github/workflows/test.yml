@@ -22,7 +22,7 @@ jobs:
             --set authorizer.authorizer_url=http://authorizer.default.svc.cluster.local:8080 \
             --set authorizer.database_type=sqlite \
             --set authorizer.database_url="/tmp/authorizer.db" \
-            --set authorizer.client_id=test-client-id \
+            --set authorizer.client_id=123456 \
             --set authorizer.client_secret=test-client-secret \
             --set authorizer.admin_secret=test-admin-secret \
             --set authorizer.jwt_type=HS256 \
