@@ -18,6 +18,7 @@ jobs:
             --wait \
             --timeout 120s \
             --namespace default \
+            --set authorizer.authorizer_url=http://authorizer.default.svc.cluster.local:8080 \
             --set authorizer.database_type=sqlite \
             --set authorizer.database_url="/tmp/authorizer.db" \
             --set authorizer.client_id=test-client-id \
