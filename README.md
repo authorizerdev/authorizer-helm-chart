@@ -316,7 +316,16 @@ extraEnv:
 
 ## Upgrading
 
-**Chart version** (`version` in `Chart.yaml`) is incremented for any template, values, or packaging change. **App version** (`appVersion`) tracks the Authorizer binary release and is updated automatically by `release.sh` on each release.
+**Chart version and app version are the same number.** `helm install --version 2.4.1`
+gets Authorizer 2.4.1 — there is no mapping table to consult. `release.sh` sets both
+on each Authorizer release.
+
+A chart-only fix (templates, values, packaging) does **not** bump the version on its
+own: it rides the next Authorizer release, or you cut an Authorizer patch release to
+carry it. That rule is what keeps the two in step — they drifted through 2.4.x
+precisely because chart-only fixes bumped independently, and the versions then
+collided when chart `2.4.1` had already been used up by the time Authorizer 2.4.1
+shipped. Re-synced at 2.4.1.
 
 When upgrading the chart, check the [CHANGELOG](CHANGELOG.md) and [MIGRATION.md](https://github.com/authorizerdev/authorizer/blob/main/MIGRATION.md) for breaking changes introduced by the app version bump.
 
@@ -330,9 +339,9 @@ to `main`. A chart that does not boot cannot reach `index.yaml`. Netlify serves 
 root at https://helm-charts.authorizer.dev, so the new version is live once that
 commit deploys.
 
-To cut a release, bump `version` in `Chart.yaml` (and `appVersion` when the binary
-changes) and merge to `main`. Nothing else. A version that is already packaged under
-`charts/` is skipped, so re-runs are no-ops.
+To cut a release, set `version` and `appVersion` in `Chart.yaml` to the same
+Authorizer version and merge to `main` — `release.sh` does this for you. Nothing else.
+A version already packaged under `charts/` is skipped, so re-runs are no-ops.
 
 Do not put a CI-skip marker in a commit that touches `charts/` or `index.yaml` —
 Netlify honours those markers and the chart will land in git without ever being served.
