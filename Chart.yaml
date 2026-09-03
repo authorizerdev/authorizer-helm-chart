@@ -12,10 +12,18 @@ description: A Helm chart for Authorizer. Authorizer is an open-source authentic
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 2.4.6
+# Chart version. Kept EQUAL to appVersion: `helm install --version X.Y.Z` gets
+# Authorizer X.Y.Z, with no mapping table to consult.
+#
+# They drifted through the 2.4.x line because chart-only fixes patch-bumped this
+# independently (chart 2.4.5 while the app was still 2.4.0), which then collided:
+# by the time Authorizer 2.4.1 shipped, chart 2.4.1 had already been consumed.
+# Re-synced at 2.4.1.
+#
+# So a chart-only fix does NOT bump this on its own — it rides the next
+# Authorizer release, or you cut an Authorizer patch release to carry it.
+# Versions follow Semantic Versioning (https://semver.org/).
+version: 2.4.1
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
