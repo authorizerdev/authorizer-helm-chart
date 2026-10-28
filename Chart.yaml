@@ -23,12 +23,12 @@ type: application
 # So a chart-only fix does NOT bump this on its own — it rides the next
 # Authorizer release, or you cut an Authorizer patch release to carry it.
 # Versions follow Semantic Versioning (https://semver.org/).
-version: 2.4.2
+version: 2.4.3
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "2.4.2"
+appVersion: "2.4.3"
 
 icon: "https://authorizer.dev/images/logo.png"
