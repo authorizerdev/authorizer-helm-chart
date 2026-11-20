@@ -2,7 +2,7 @@
 
 # authorizer-helm-chart
 
-Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hosted authentication and authorization server. Authorizer provides OAuth 2.0 / OpenID Connect compliant APIs, a GraphQL-first API surface, and supports 13+ database backends (Postgres, MySQL, SQLite, SQLServer, YugaByte, MariaDB, PlanetScale, CassandraDB, ScyllaDB, MongoDB, ArangoDB, DynamoDB, Couchbase). You bring your database; Authorizer handles auth.
+Helm chart for [Authorizer](https://authorizer.dev) — an open-source, self-hosted authentication and authorization server. Authorizer provides OAuth 2.0 / OpenID Connect compliant APIs, a GraphQL-first API surface, and supports 16 database backends (Postgres, MySQL, MariaDB, SQLite, libSQL, SQL Server, YugabyteDB, CockroachDB, PlanetScale, SereneDB, MongoDB, ArangoDB, Cassandra, ScyllaDB, DynamoDB, Couchbase). You bring your database; Authorizer handles auth.
 
 This chart deploys the Authorizer binary as a Kubernetes `Deployment`, wires up a `Service` (HTTP + optional gRPC port), optional metrics infrastructure, and exposes all server flags as `values.yaml` keys.
 
@@ -166,7 +166,7 @@ The metrics port is never added to the main `Service` used for Ingress. Use `met
 
 | Name | Description | Required | Default |
 | ---- | ----------- | -------- | ------- |
-| `authorizer.database_type` | Database backend. One of: `postgres`, `mysql`, `planetscale`, `sqlite`, `sqlserver`, `mongodb`, `arangodb`, `yugabyte`, `mariadb`, `cassandradb`, `scylladb`, `dynamodb`, `couchbase` | **true** | — |
+| `authorizer.database_type` | Database backend. One of: `postgres`, `yugabyte`, `cockroachdb`, `serenedb`, `mysql`, `mariadb`, `planetscale`, `sqlite`, `libsql`, `sqlserver`, `mongodb`, `arangodb`, `cassandradb`, `scylladb`, `dynamodb`, `couchbase` | **true** | — |
 | `authorizer.database_url` | Database connection string. See [docs](https://docs.authorizer.dev/core/databases) | **true** | — |
 | `authorizer.database_name` | Database name | false | — |
 | `authorizer.database_host` | Database host. Used for `cassandradb` and `scylladb` | false | — |

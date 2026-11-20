@@ -1,6 +1,6 @@
 apiVersion: v2
 name: authorizer
-description: A Helm chart for Authorizer. Authorizer is an open-source authentication and authorization solution for your applications. Bring your database and have complete control over the user information. You can self-host authorizer instances and connect to any database (Currently supports 11+ databases including Postgres, MySQL, SQLite, SQLServer, YugaByte, MariaDB, PlanetScale, CassandraDB, ScyllaDB, MongoDB, ArangoDB, DynamoDB).
+description: A Helm chart for Authorizer. Authorizer is an open-source authentication and authorization solution for your applications. Bring your database and have complete control over the user information. You can self-host authorizer instances and connect to any database (supports 16 databases - Postgres, MySQL, MariaDB, SQLite, libSQL, SQL Server, YugabyteDB, CockroachDB, PlanetScale, SereneDB, MongoDB, ArangoDB, Cassandra, ScyllaDB, DynamoDB, Couchbase).
 
 # A chart can be either an 'application' or a 'library' chart.
 #
