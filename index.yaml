@@ -2,8 +2,24 @@ apiVersion: v1
 entries:
   authorizer:
   - apiVersion: v2
+    appVersion: 2.4.10
+    created: "2026-11-27T07:29:25.182373643Z"
+    description: A Helm chart for Authorizer. Authorizer is an open-source authentication
+      and authorization solution for your applications. Bring your database and have
+      complete control over the user information. You can self-host authorizer instances
+      and connect to any database (Currently supports 11+ databases including Postgres,
+      MySQL, SQLite, SQLServer, YugaByte, MariaDB, PlanetScale, CassandraDB, ScyllaDB,
+      MongoDB, ArangoDB, DynamoDB).
+    digest: 030c94c1e606e3f7b4423ba5eb9e8afe5555e7d0a1ba20f415b1c07827ae8705
+    icon: https://authorizer.dev/images/logo.png
+    name: authorizer
+    type: application
+    urls:
+    - https://helm-charts.authorizer.dev/charts/authorizer-2.4.10.tgz
+    version: 2.4.10
+  - apiVersion: v2
     appVersion: 2.4.9
-    created: "2026-11-26T12:06:19.755587954Z"
+    created: "2026-11-27T07:29:25.193776948Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -19,7 +35,7 @@ entries:
     version: 2.4.9
   - apiVersion: v2
     appVersion: 2.4.8
-    created: "2026-11-26T12:06:19.754742707Z"
+    created: "2026-11-27T07:29:25.192587322Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -35,7 +51,7 @@ entries:
     version: 2.4.8
   - apiVersion: v2
     appVersion: 2.4.7
-    created: "2026-11-26T12:06:19.753917376Z"
+    created: "2026-11-27T07:29:25.19137515Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -51,7 +67,7 @@ entries:
     version: 2.4.7
   - apiVersion: v2
     appVersion: 2.4.6
-    created: "2026-11-26T12:06:19.75299511Z"
+    created: "2026-11-27T07:29:25.19013942Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -67,7 +83,7 @@ entries:
     version: 2.4.6
   - apiVersion: v2
     appVersion: 2.4.5
-    created: "2026-11-26T12:06:19.751300351Z"
+    created: "2026-11-27T07:29:25.188676079Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -83,7 +99,7 @@ entries:
     version: 2.4.5
   - apiVersion: v2
     appVersion: 2.4.4
-    created: "2026-11-26T12:06:19.750499176Z"
+    created: "2026-11-27T07:29:25.186133352Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -99,7 +115,7 @@ entries:
     version: 2.4.4
   - apiVersion: v2
     appVersion: 2.4.3
-    created: "2026-11-26T12:06:19.749635433Z"
+    created: "2026-11-27T07:29:25.184899936Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -115,7 +131,7 @@ entries:
     version: 2.4.3
   - apiVersion: v2
     appVersion: 2.4.2
-    created: "2026-11-26T12:06:19.748801191Z"
+    created: "2026-11-27T07:29:25.183577633Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -131,7 +147,7 @@ entries:
     version: 2.4.2
   - apiVersion: v2
     appVersion: 2.4.1
-    created: "2026-11-26T12:06:19.747923785Z"
+    created: "2026-11-27T07:29:25.181049866Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -147,7 +163,7 @@ entries:
     version: 2.4.1
   - apiVersion: v2
     appVersion: 2.4.0
-    created: "2026-11-26T12:06:19.746306396Z"
+    created: "2026-11-27T07:29:25.178763119Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -163,7 +179,7 @@ entries:
     version: 2.4.0
   - apiVersion: v2
     appVersion: 2.4.0-rc.18
-    created: "2026-11-26T12:06:19.745528384Z"
+    created: "2026-11-27T07:29:25.177554178Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -179,7 +195,7 @@ entries:
     version: 2.3.0
   - apiVersion: v2
     appVersion: 2.3.0
-    created: "2026-11-26T12:06:19.744773075Z"
+    created: "2026-11-27T07:29:25.176437739Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -195,7 +211,7 @@ entries:
     version: 2.2.1
   - apiVersion: v2
     appVersion: 2.3.0
-    created: "2026-11-26T12:06:19.744124675Z"
+    created: "2026-11-27T07:29:25.175511166Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -211,7 +227,7 @@ entries:
     version: 2.2.0
   - apiVersion: v2
     appVersion: 2.0.1
-    created: "2026-11-26T12:06:19.743450058Z"
+    created: "2026-11-27T07:29:25.174557871Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -227,7 +243,7 @@ entries:
     version: 2.0.1
   - apiVersion: v2
     appVersion: 1.4.0
-    created: "2026-11-26T12:06:19.74268244Z"
+    created: "2026-11-27T07:29:25.173896461Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -243,7 +259,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.8
-    created: "2026-11-26T12:06:19.741888541Z"
+    created: "2026-11-27T07:29:25.172807306Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -259,7 +275,7 @@ entries:
     version: 1.3.8
   - apiVersion: v2
     appVersion: 1.3.7
-    created: "2026-11-26T12:06:19.741599149Z"
+    created: "2026-11-27T07:29:25.17184095Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -275,7 +291,7 @@ entries:
     version: 1.3.7
   - apiVersion: v2
     appVersion: 1.3.6
-    created: "2026-11-26T12:06:19.741292681Z"
+    created: "2026-11-27T07:29:25.171401675Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -291,7 +307,7 @@ entries:
     version: 1.3.6
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2026-11-26T12:06:19.741004769Z"
+    created: "2026-11-27T07:29:25.170960064Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -307,7 +323,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2026-11-26T12:06:19.740700556Z"
+    created: "2026-11-27T07:29:25.170512813Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -323,7 +339,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2026-11-26T12:06:19.740388419Z"
+    created: "2026-11-27T07:29:25.170080511Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -339,7 +355,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.4
-    created: "2026-11-26T12:06:19.740104305Z"
+    created: "2026-11-27T07:29:25.169659295Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -355,7 +371,7 @@ entries:
     version: 1.2.4
   - apiVersion: v2
     appVersion: 1.2.3
-    created: "2026-11-26T12:06:19.739794416Z"
+    created: "2026-11-27T07:29:25.169198464Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -371,7 +387,7 @@ entries:
     version: 1.2.3
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2026-11-26T12:06:19.739471718Z"
+    created: "2026-11-27T07:29:25.168743891Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -387,7 +403,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2026-11-26T12:06:19.739046504Z"
+    created: "2026-11-27T07:29:25.16825056Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -403,7 +419,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2026-11-26T12:06:19.738138195Z"
+    created: "2026-11-27T07:29:25.167337991Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -419,7 +435,7 @@ entries:
     version: 1.2.0
   - apiVersion: v2
     appVersion: 1.1.71
-    created: "2026-11-26T12:06:19.73754812Z"
+    created: "2026-11-27T07:29:25.166147295Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -435,7 +451,7 @@ entries:
     version: 1.1.71
   - apiVersion: v2
     appVersion: 1.1.70
-    created: "2026-11-26T12:06:19.737243556Z"
+    created: "2026-11-27T07:29:25.165717814Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -451,7 +467,7 @@ entries:
     version: 1.1.70
   - apiVersion: v2
     appVersion: 1.1.69
-    created: "2026-11-26T12:06:19.736971124Z"
+    created: "2026-11-27T07:29:25.165288472Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -467,7 +483,7 @@ entries:
     version: 1.1.69
   - apiVersion: v2
     appVersion: 1.1.68
-    created: "2026-11-26T12:06:19.736683019Z"
+    created: "2026-11-27T07:29:25.164692147Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -483,7 +499,7 @@ entries:
     version: 1.1.68
   - apiVersion: v2
     appVersion: 1.1.64
-    created: "2026-11-26T12:06:19.736378329Z"
+    created: "2026-11-27T07:29:25.164062708Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -499,7 +515,7 @@ entries:
     version: 1.1.64
   - apiVersion: v2
     appVersion: 1.1.63
-    created: "2026-11-26T12:06:19.736087272Z"
+    created: "2026-11-27T07:29:25.163625518Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -515,7 +531,7 @@ entries:
     version: 1.1.63
   - apiVersion: v2
     appVersion: 1.1.62
-    created: "2026-11-26T12:06:19.735788781Z"
+    created: "2026-11-27T07:29:25.163176158Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -531,7 +547,7 @@ entries:
     version: 1.1.62
   - apiVersion: v2
     appVersion: 1.1.61
-    created: "2026-11-26T12:06:19.735507346Z"
+    created: "2026-11-27T07:29:25.162756633Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -547,7 +563,7 @@ entries:
     version: 1.1.61
   - apiVersion: v2
     appVersion: 1.1.60
-    created: "2026-11-26T12:06:19.735192529Z"
+    created: "2026-11-27T07:29:25.162319609Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -563,7 +579,7 @@ entries:
     version: 1.1.60
   - apiVersion: v2
     appVersion: 1.1.59
-    created: "2026-11-26T12:06:19.734889895Z"
+    created: "2026-11-27T07:29:25.161868302Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -579,7 +595,7 @@ entries:
     version: 1.1.59
   - apiVersion: v2
     appVersion: 1.1.58
-    created: "2026-11-26T12:06:19.734564541Z"
+    created: "2026-11-27T07:29:25.161327935Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -595,7 +611,7 @@ entries:
     version: 1.1.58
   - apiVersion: v2
     appVersion: 1.1.57
-    created: "2026-11-26T12:06:19.733828527Z"
+    created: "2026-11-27T07:29:25.16030186Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -611,7 +627,7 @@ entries:
     version: 1.1.57
   - apiVersion: v2
     appVersion: 1.1.54
-    created: "2026-11-26T12:06:19.732971444Z"
+    created: "2026-11-27T07:29:25.159078671Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -627,7 +643,7 @@ entries:
     version: 1.1.54
   - apiVersion: v2
     appVersion: 1.1.53
-    created: "2026-11-26T12:06:19.732702259Z"
+    created: "2026-11-27T07:29:25.158670434Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -643,7 +659,7 @@ entries:
     version: 1.1.53
   - apiVersion: v2
     appVersion: 1.1.52
-    created: "2026-11-26T12:06:19.732435233Z"
+    created: "2026-11-27T07:29:25.158259967Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -659,7 +675,7 @@ entries:
     version: 1.1.52
   - apiVersion: v2
     appVersion: 1.1.50
-    created: "2026-11-26T12:06:19.732146752Z"
+    created: "2026-11-27T07:29:25.157837927Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -675,7 +691,7 @@ entries:
     version: 1.1.50
   - apiVersion: v2
     appVersion: 1.1.49
-    created: "2026-11-26T12:06:19.731873522Z"
+    created: "2026-11-27T07:29:25.157398394Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -691,7 +707,7 @@ entries:
     version: 1.1.49
   - apiVersion: v2
     appVersion: 1.1.48
-    created: "2026-11-26T12:06:19.731606509Z"
+    created: "2026-11-27T07:29:25.156970357Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -707,7 +723,7 @@ entries:
     version: 1.1.48
   - apiVersion: v2
     appVersion: 1.1.47
-    created: "2026-11-26T12:06:19.731312297Z"
+    created: "2026-11-27T07:29:25.156570112Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -723,7 +739,7 @@ entries:
     version: 1.1.47
   - apiVersion: v2
     appVersion: 1.1.44
-    created: "2026-11-26T12:06:19.73102293Z"
+    created: "2026-11-27T07:29:25.156143468Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -739,7 +755,7 @@ entries:
     version: 1.1.44
   - apiVersion: v2
     appVersion: 1.1.43
-    created: "2026-11-26T12:06:19.730751043Z"
+    created: "2026-11-27T07:29:25.155716304Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -755,7 +771,7 @@ entries:
     version: 1.1.43
   - apiVersion: v2
     appVersion: 1.1.42
-    created: "2026-11-26T12:06:19.73044181Z"
+    created: "2026-11-27T07:29:25.155313767Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -771,7 +787,7 @@ entries:
     version: 1.1.42
   - apiVersion: v2
     appVersion: 1.1.41
-    created: "2026-11-26T12:06:19.730111933Z"
+    created: "2026-11-27T07:29:25.154843874Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -787,7 +803,7 @@ entries:
     version: 1.1.41
   - apiVersion: v2
     appVersion: 1.1.40
-    created: "2026-11-26T12:06:19.729790599Z"
+    created: "2026-11-27T07:29:25.154380154Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -803,7 +819,7 @@ entries:
     version: 1.1.40
   - apiVersion: v2
     appVersion: 1.1.39
-    created: "2026-11-26T12:06:19.72914982Z"
+    created: "2026-11-27T07:29:25.153757713Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -819,7 +835,7 @@ entries:
     version: 1.1.39
   - apiVersion: v2
     appVersion: 1.1.38
-    created: "2026-11-26T12:06:19.728380714Z"
+    created: "2026-11-27T07:29:25.152814308Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -835,7 +851,7 @@ entries:
     version: 1.1.38
   - apiVersion: v2
     appVersion: 1.1.37
-    created: "2026-11-26T12:06:19.72804235Z"
+    created: "2026-11-27T07:29:25.15152133Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -851,7 +867,7 @@ entries:
     version: 1.1.37
   - apiVersion: v2
     appVersion: 1.1.36
-    created: "2026-11-26T12:06:19.727705822Z"
+    created: "2026-11-27T07:29:25.150190149Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -867,7 +883,7 @@ entries:
     version: 1.1.36
   - apiVersion: v2
     appVersion: 1.1.35
-    created: "2026-11-26T12:06:19.727327685Z"
+    created: "2026-11-27T07:29:25.149675095Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -883,7 +899,7 @@ entries:
     version: 1.1.35
   - apiVersion: v2
     appVersion: 1.1.33
-    created: "2026-11-26T12:06:19.7269974Z"
+    created: "2026-11-27T07:29:25.149110608Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -899,7 +915,7 @@ entries:
     version: 1.1.33
   - apiVersion: v2
     appVersion: 1.1.32
-    created: "2026-11-26T12:06:19.726670694Z"
+    created: "2026-11-27T07:29:25.148588422Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -915,7 +931,7 @@ entries:
     version: 1.1.32
   - apiVersion: v2
     appVersion: 1.1.31
-    created: "2026-11-26T12:06:19.726332355Z"
+    created: "2026-11-27T07:29:25.148130134Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -931,7 +947,7 @@ entries:
     version: 1.1.31
   - apiVersion: v2
     appVersion: 1.1.30
-    created: "2026-11-26T12:06:19.726012353Z"
+    created: "2026-11-27T07:29:25.147699443Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -947,7 +963,7 @@ entries:
     version: 1.1.30
   - apiVersion: v2
     appVersion: 1.1.29
-    created: "2026-11-26T12:06:19.725720002Z"
+    created: "2026-11-27T07:29:25.147182696Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -963,7 +979,7 @@ entries:
     version: 1.1.29
   - apiVersion: v2
     appVersion: 1.1.28-rc.4
-    created: "2026-11-26T12:06:19.725374802Z"
+    created: "2026-11-27T07:29:25.146759171Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -979,7 +995,7 @@ entries:
     version: 1.1.28-rc.4
   - apiVersion: v2
     appVersion: 1.1.28-rc.1
-    created: "2026-11-26T12:06:19.725004226Z"
+    created: "2026-11-27T07:29:25.146257965Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -995,7 +1011,7 @@ entries:
     version: 1.1.28-rc.1
   - apiVersion: v2
     appVersion: 1.1.27
-    created: "2026-11-26T12:06:19.724629977Z"
+    created: "2026-11-27T07:29:25.145796555Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -1011,7 +1027,7 @@ entries:
     version: 1.1.27
   - apiVersion: v2
     appVersion: 1.1.26
-    created: "2026-11-26T12:06:19.723701819Z"
+    created: "2026-11-27T07:29:25.145355331Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -1027,7 +1043,7 @@ entries:
     version: 1.1.26
   - apiVersion: v2
     appVersion: 1.1.25
-    created: "2026-11-26T12:06:19.72271965Z"
+    created: "2026-11-27T07:29:25.14485165Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -1043,7 +1059,7 @@ entries:
     version: 1.1.25
   - apiVersion: v2
     appVersion: 1.1.23
-    created: "2026-11-26T12:06:19.722335901Z"
+    created: "2026-11-27T07:29:25.144373532Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -1059,7 +1075,7 @@ entries:
     version: 1.1.23
   - apiVersion: v2
     appVersion: 1.1.22
-    created: "2026-11-26T12:06:19.721952809Z"
+    created: "2026-11-27T07:29:25.143810059Z"
     description: A Helm chart for Authorizer. Authorizer is an open-source authentication
       and authorization solution for your applications. Bring your database and have
       complete control over the user information. You can self-host authorizer instances
@@ -1073,4 +1089,4 @@ entries:
     urls:
     - https://helm-charts.authorizer.dev/charts/authorizer-1.1.22.tgz
     version: 1.1.22
-generated: "2026-11-26T12:06:19.721465183Z"
+generated: "2026-11-27T07:29:25.143052894Z"
